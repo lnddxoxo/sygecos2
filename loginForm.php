@@ -2,9 +2,20 @@
 session_start(); // Démarre la session pour récupérer les messages d'erreur
 
 $login_error = '';
+$attempts_remaining = '';
+$is_blocked = false;
+
 if (isset($_SESSION['login_error'])) {
     $login_error = $_SESSION['login_error'];
-    unset($_SESSION['login_error']); // Efface le message après l'avoir affiché
+    unset($_SESSION['login_error']);
+}
+
+if (isset($_SESSION['attempts_remaining'])) {
+    $attempts_remaining = $_SESSION['attempts_remaining'];
+}
+
+if (isset($_SESSION['account_blocked'])) {
+    $is_blocked = $_SESSION['account_blocked'];
 }
 ?>
 <!DOCTYPE html>
@@ -44,6 +55,8 @@ if (isset($_SESSION['login_error'])) {
             /* Couleurs Secondaires */
             --secondary-500: #22c55e;
             --secondary-600: #16a34a;
+            --error-500: #ef4444;
+            --warning-500: #f59e0b;
 
             /* Typographie */
             --font-primary: 'Segoe UI', system-ui, -apple-system, sans-serif;
@@ -136,20 +149,20 @@ if (isset($_SESSION['login_error'])) {
             align-items: center;
             justify-content: center;
             min-height: 100vh;
-            padding: var(--space-6);
+            padding: var(--space-4);
         }
 
         .login-card {
             display: grid;
             grid-template-columns: 1fr 1fr;
             width: 100%;
-            max-width: 900px;
-            min-height: 600px;
+            max-width: 750px;
+            min-height: 500px;
             background: var(--glass-bg);
             backdrop-filter: var(--glass-backdrop);
             -webkit-backdrop-filter: var(--glass-backdrop);
             border: 1px solid var(--glass-border);
-            border-radius: var(--radius-3xl);
+            border-radius: var(--radius-2xl);
             box-shadow: var(--glass-shadow);
             overflow: hidden;
         }
@@ -167,7 +180,7 @@ if (isset($_SESSION['login_error'])) {
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            padding: var(--space-8);
+            padding: var(--space-6);
             color: white;
             overflow: hidden;
         }
@@ -195,8 +208,8 @@ if (isset($_SESSION['login_error'])) {
             position: absolute;
             top: 20%;
             right: -20%;
-            width: 300px;
-            height: 300px;
+            width: 200px;
+            height: 200px;
             background: radial-gradient(circle, 
                 rgba(34, 197, 94, 0.3) 0%, 
                 transparent 70%);
@@ -213,19 +226,19 @@ if (isset($_SESSION['login_error'])) {
             position: relative;
             z-index: 2;
             text-align: center;
-            margin-bottom: var(--space-8);
+            margin-bottom: var(--space-6);
         }
 
         .logo-icon {
-            width: 80px;
-            height: 80px;
+            width: 60px;
+            height: 60px;
             background: rgba(255, 255, 255, 0.2);
             border: 2px solid rgba(255, 255, 255, 0.3);
-            border-radius: var(--radius-2xl);
+            border-radius: var(--radius-xl);
             display: flex;
             align-items: center;
             justify-content: center;
-            margin: 0 auto var(--space-4);
+            margin: 0 auto var(--space-3);
             backdrop-filter: blur(10px);
             transition: all var(--transition-normal);
         }
@@ -235,27 +248,20 @@ if (isset($_SESSION['login_error'])) {
             background: rgba(255, 255, 255, 0.3);
         }
 
-        .logo-icon img {
-            width: 70%;
-            height: 70%;
-            object-fit: contain;
-            filter: brightness(0) invert(1);
-        }
-
         .brand-text {
-            font-size: 2.5rem;
+            font-size: 2rem;
             font-weight: 800;
             margin-bottom: var(--space-2);
-            letter-spacing: 2px;
+            letter-spacing: 1px;
             text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
         }
 
         .brand-subtitle {
-            font-size: 1.1rem;
+            font-size: 0.9rem;
             opacity: 0.9;
             font-weight: 300;
             text-align: center;
-            line-height: 1.5;
+            line-height: 1.4;
             text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
         }
 
@@ -274,24 +280,24 @@ if (isset($_SESSION['login_error'])) {
         }
 
         .floating-shape:nth-child(1) {
-            width: 60px;
-            height: 60px;
+            width: 40px;
+            height: 40px;
             top: 20%;
             left: 10%;
             animation-delay: 0s;
         }
 
         .floating-shape:nth-child(2) {
-            width: 40px;
-            height: 40px;
+            width: 30px;
+            height: 30px;
             top: 70%;
             left: 80%;
             animation-delay: 2s;
         }
 
         .floating-shape:nth-child(3) {
-            width: 30px;
-            height: 30px;
+            width: 25px;
+            height: 25px;
             top: 40%;
             left: 5%;
             animation-delay: 4s;
@@ -299,12 +305,12 @@ if (isset($_SESSION['login_error'])) {
 
         @keyframes floatShape {
             0%, 100% { transform: translateY(0px) rotate(0deg); }
-            50% { transform: translateY(-20px) rotate(180deg); }
+            50% { transform: translateY(-15px) rotate(180deg); }
         }
 
         /* === CÔTÉ DROIT FORMULAIRE === */
         .login-form-container {
-            padding: var(--space-8);
+            padding: var(--space-6);
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -313,11 +319,12 @@ if (isset($_SESSION['login_error'])) {
         }
 
         .form-header {
-            margin-bottom: var(--space-8);
+            margin-bottom: var(--space-6);
+            text-align: center;
         }
 
         .form-title {
-            font-size: 2rem;
+            font-size: 1.75rem;
             font-weight: 700;
             color: var(--primary-800);
             margin-bottom: var(--space-2);
@@ -325,10 +332,10 @@ if (isset($_SESSION['login_error'])) {
 
         .form-subtitle {
             color: var(--primary-600);
-            font-size: 0.95rem;
+            font-size: 0.9rem;
         }
 
-        /* Style pour le message d'erreur */
+        /* Messages d'erreur et de statut */
         .error-message {
             color: #dc3545;
             background-color: #f8d7da;
@@ -336,9 +343,34 @@ if (isset($_SESSION['login_error'])) {
             border-radius: var(--radius-md);
             padding: var(--space-3);
             margin-bottom: var(--space-4);
+            font-size: 0.85rem;
+            text-align: center;
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        .warning-message {
+            color: #856404;
+            background-color: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: var(--radius-md);
+            padding: var(--space-3);
+            margin-bottom: var(--space-4);
+            font-size: 0.85rem;
+            text-align: center;
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        .blocked-message {
+            color: #721c24;
+            background-color: #f8d7da;
+            border: 1px solid #f5c6cb;
+            border-radius: var(--radius-md);
+            padding: var(--space-4);
+            margin-bottom: var(--space-4);
             font-size: 0.9rem;
             text-align: center;
             animation: fadeIn 0.5s ease-out;
+            font-weight: 600;
         }
 
         @keyframes fadeIn {
@@ -349,7 +381,7 @@ if (isset($_SESSION['login_error'])) {
         .login-form {
             display: flex;
             flex-direction: column;
-            gap: var(--space-6);
+            gap: var(--space-5);
         }
 
         .form-group {
@@ -368,11 +400,12 @@ if (isset($_SESSION['login_error'])) {
             padding: var(--space-4);
             border: 2px solid var(--primary-200);
             border-radius: var(--radius-lg);
-            font-size: 1rem;
+            font-size: 0.95rem;
             background: rgba(255, 255, 255, 0.8);
             backdrop-filter: blur(10px);
             transition: all var(--transition-normal);
             outline: none;
+            height: 48px; /* Hauteur uniforme pour tous les champs */
         }
 
         .form-input:focus {
@@ -383,6 +416,12 @@ if (isset($_SESSION['login_error'])) {
 
         .form-input::placeholder {
             color: var(--primary-400);
+        }
+
+        .form-input:disabled {
+            background: var(--primary-100);
+            color: var(--primary-400);
+            cursor: not-allowed;
         }
 
         .password-container {
@@ -398,7 +437,7 @@ if (isset($_SESSION['login_error'])) {
             border: none;
             color: var(--primary-500);
             cursor: pointer;
-            font-size: 1.1rem;
+            font-size: 1rem;
             transition: color var(--transition-normal);
         }
 
@@ -414,7 +453,7 @@ if (isset($_SESSION['login_error'])) {
         .forgot-password a {
             color: var(--accent-600);
             text-decoration: none;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             font-weight: 500;
             transition: color var(--transition-normal);
         }
@@ -430,19 +469,20 @@ if (isset($_SESSION['login_error'])) {
             color: white;
             border: none;
             border-radius: var(--radius-lg);
-            font-size: 1rem;
+            font-size: 0.95rem;
             font-weight: 600;
             cursor: pointer;
             transition: all var(--transition-normal);
-            margin-top: var(--space-4);
+            margin-top: var(--space-3);
             display: flex;
             align-items: center;
             justify-content: center;
             gap: var(--space-2);
             box-shadow: var(--shadow-md);
+            height: 48px;
         }
 
-        .login-button:hover {
+        .login-button:hover:not(:disabled) {
             background: linear-gradient(135deg, var(--accent-600), var(--accent-700));
             transform: translateY(-2px);
             box-shadow: var(--shadow-lg);
@@ -452,52 +492,91 @@ if (isset($_SESSION['login_error'])) {
             transform: translateY(0);
         }
 
-        .signup-link {
-            text-align: center;
-            margin-top: var(--space-6);
-            color: var(--primary-600);
-            font-size: 0.9rem;
+        .login-button:disabled {
+            background: var(--primary-400);
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: var(--shadow-sm);
         }
 
-        .signup-link a {
-            color: var(--accent-600);
+        /* === BOUTON DE RETOUR === */
+        .back-button {
+            position: fixed;
+            top: var(--space-4);
+            left: var(--space-4);
+            background: var(--glass-bg);
+            backdrop-filter: var(--glass-backdrop);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius-lg);
+            padding: var(--space-2) var(--space-4);
+            color: var(--primary-700);
             text-decoration: none;
-            font-weight: 600;
-            transition: color var(--transition-normal);
+            font-weight: 500;
+            font-size: 0.9rem;
+            transition: all var(--transition-normal);
+            box-shadow: var(--shadow-sm);
+            z-index: 10;
         }
 
-        .signup-link a:hover {
-            color: var(--accent-700);
-            text-decoration: underline;
+        .back-button:hover {
+            background: rgba(255, 255, 255, 0.4);
+            transform: translateX(-2px);
+            box-shadow: var(--shadow-md);
         }
 
         /* === RESPONSIVE === */
         @media (max-width: 768px) {
+            .login-container {
+                padding: var(--space-2);
+            }
+
             .login-card {
                 grid-template-columns: 1fr;
-                max-width: 400px;
+                max-width: 420px;
                 min-height: auto;
             }
 
             .login-visual {
-                min-height: 200px;
-                padding: var(--space-6);
+                min-height: 180px;
+                padding: var(--space-4);
             }
 
             .brand-text {
-                font-size: 2rem;
+                font-size: 1.75rem;
             }
 
             .brand-subtitle {
-                font-size: 1rem;
+                font-size: 0.8rem;
             }
 
             .login-form-container {
-                padding: var(--space-6);
+                padding: var(--space-5);
             }
 
             .form-title {
-                font-size: 1.75rem;
+                font-size: 1.5rem;
+            }
+
+            .back-button {
+                top: var(--space-2);
+                left: var(--space-2);
+                padding: var(--space-2) var(--space-3);
+                font-size: 0.8rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .login-container {
+                padding: var(--space-1);
+            }
+
+            .login-card {
+                max-width: 100%;
+                border-radius: var(--radius-xl);
+            }
+
+            .login-form-container {
+                padding: var(--space-4);
             }
         }
 
@@ -536,40 +615,16 @@ if (isset($_SESSION['login_error'])) {
             }
         }
 
-        /* === BOUTON DE RETOUR === */
-        .back-button {
-            position: fixed;
-            top: var(--space-6);
-            left: var(--space-6);
-            background: var(--glass-bg);
-            backdrop-filter: var(--glass-backdrop);
-            border: 1px solid var(--glass-border);
-            border-radius: var(--radius-lg);
-            padding: var(--space-3) var(--space-4);
-            color: var(--primary-700);
-            text-decoration: none;
-            font-weight: 500;
-            transition: all var(--transition-normal);
-            box-shadow: var(--shadow-sm);
-            z-index: 10;
-        }
-
-        .back-button:hover {
-            background: rgba(255, 255, 255, 0.4);
-            transform: translateX(-2px);
-            box-shadow: var(--shadow-md);
-        }
-
-        /* Helper message */
-        .login-help {
-            background: #e3f2fd;
-            border: 1px solid #90caf9;
-            color: #1565c0;
-            padding: var(--space-3);
+        /* Compteur de tentatives */
+        .attempts-counter {
+            background: var(--warning-500);
+            color: white;
+            padding: var(--space-2) var(--space-3);
             border-radius: var(--radius-md);
-            font-size: 0.85rem;
-            margin-bottom: var(--space-4);
+            font-size: 0.8rem;
             text-align: center;
+            margin-bottom: var(--space-3);
+            font-weight: 600;
         }
     </style>
 </head>
@@ -578,7 +633,7 @@ if (isset($_SESSION['login_error'])) {
 
     <a href="index.php" class="back-button">
         <i class="fas fa-arrow-left"></i>
-        Retour à l'accueil
+        Retour
     </a>
 
     <div class="login-container">
@@ -592,7 +647,7 @@ if (isset($_SESSION['login_error'])) {
 
                 <div class="logo-section">
                     <div class="logo-icon">
-                        <i class="fas fa-graduation-cap" style="font-size: 2rem; color: white;"></i>
+                        <i class="fas fa-graduation-cap" style="font-size: 1.5rem; color: white;"></i>
                     </div>
                     <h1 class="brand-text">SYGECOS</h1>
                     <p class="brand-subtitle">
@@ -606,18 +661,32 @@ if (isset($_SESSION['login_error'])) {
             <div class="login-form-container">
                 <div class="form-header">
                     <h2 class="form-title">Connexion</h2>
-                    <p class="form-subtitle">Connectez-vous avec votre email ou identifiant SYGECOS</p>
+                    <p class="form-subtitle">Connectez-vous avec votre email ou identifiant</p>
                 </div>
 
-                <?php if ($login_error): ?>
+                <?php if ($is_blocked): ?>
+                    <div class="blocked-message">
+                        <i class="fas fa-lock"></i>
+                        Accès temporairement bloqué. Trop de tentatives de connexion échouées.
+                        <br>Veuillez réessayer dans quelques minutes.
+                    </div>
+                <?php endif; ?>
+
+                <?php if ($login_error && !$is_blocked): ?>
                     <div class="error-message">
+                        <i class="fas fa-exclamation-triangle"></i>
                         <?php echo htmlspecialchars($login_error); ?>
                     </div>
                 <?php endif; ?>
 
-                
+                <?php if ($attempts_remaining && !$is_blocked): ?>
+                    <div class="attempts-counter">
+                        <i class="fas fa-exclamation-circle"></i>
+                        Il vous reste <?php echo $attempts_remaining; ?> tentative(s)
+                    </div>
+                <?php endif; ?>
 
-                <form class="login-form" action="process_login.php" method="POST">
+                <form class="login-form" action="process_login.php" method="POST" <?php echo $is_blocked ? 'style="pointer-events: none; opacity: 0.6;"' : ''; ?>>
                     <div class="form-group">
                         <label for="identifier" class="form-label">Email ou Identifiant</label>
                         <input 
@@ -627,6 +696,7 @@ if (isset($_SESSION['login_error'])) {
                             class="form-input" 
                             placeholder="Entrez votre email ou identifiant"
                             required
+                            <?php echo $is_blocked ? 'disabled' : ''; ?>
                         >
                     </div>
 
@@ -640,25 +710,22 @@ if (isset($_SESSION['login_error'])) {
                                 class="form-input" 
                                 placeholder="Entrez votre mot de passe"
                                 required
+                                <?php echo $is_blocked ? 'disabled' : ''; ?>
                             >
-                            <button type="button" class="password-toggle" onclick="togglePassword()">
+                            <button type="button" class="password-toggle" onclick="togglePassword()" <?php echo $is_blocked ? 'disabled' : ''; ?>>
                                 <i class="fas fa-eye" id="toggle-icon"></i>
                             </button>
                         </div>
                         <div class="forgot-password">
-                            <a href="/forgot-password">Mot de passe oublié ?</a>
+                            <a href="forgot_password.php">Mot de passe oublié ?</a>
                         </div>
                     </div>
 
-                    <button type="submit" class="login-button">
+                    <button type="submit" class="login-button" <?php echo $is_blocked ? 'disabled' : ''; ?>>
                         <i class="fas fa-sign-in-alt"></i>
                         Se connecter
                     </button>
                 </form>
-
-                <div class="signup-link">
-                    Pas encore de compte ? <a href="/register">Créer un compte</a>
-                </div>
             </div>
         </div>
     </div>
@@ -687,10 +754,38 @@ if (isset($_SESSION['login_error'])) {
                     group.style.opacity = '1';
                 }, 100 * (index + 1));
             });
+
+            // Auto-focus sur le champ identifiant si pas bloqué
+            <?php if (!$is_blocked): ?>
+            document.getElementById('identifier').focus();
+            <?php endif; ?>
         });
 
-        // Auto-focus sur le champ identifiant
-        document.getElementById('identifier').focus();
+        // Gestion du décompte de blocage
+        <?php if ($is_blocked): ?>
+        let timeLeft = <?php echo $_SESSION['block_time_remaining'] ?? 300; ?>;
+        
+        function updateTimer() {
+            if (timeLeft > 0) {
+                const minutes = Math.floor(timeLeft / 60);
+                const seconds = timeLeft % 60;
+                const blockedMessage = document.querySelector('.blocked-message');
+                if (blockedMessage) {
+                    blockedMessage.innerHTML = `
+                        <i class="fas fa-lock"></i>
+                        Accès temporairement bloqué. Trop de tentatives de connexion échouées.
+                        <br>Veuillez réessayer dans ${minutes}:${seconds.toString().padStart(2, '0')}.
+                    `;
+                }
+                timeLeft--;
+                setTimeout(updateTimer, 1000);
+            } else {
+                location.reload();
+            }
+        }
+        
+        updateTimer();
+        <?php endif; ?>
     </script>
 </body>
 </html>

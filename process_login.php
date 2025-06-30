@@ -1,7 +1,7 @@
 <?php
-session_start(); // Démarre la session pour stocker les informations de l'utilisateur
+session_start();
 
-// 1. Configuration de la base de données avec PDO
+// Configuration de la base de données avec PDO
 $host = "localhost";
 $db = "sygecos"; 
 $user = "root"; 
@@ -19,24 +19,116 @@ try {
     $pdo = new PDO($dsn, $user, $pass, $options);
 } catch (\PDOException $e) {
     $_SESSION['login_error'] = "Erreur de connexion à la base de données. Veuillez réessayer plus tard.";
-    header("Location: login.php");
+    header("Location: loginForm.php");
     exit;
 }
 
-// Vérifie si le formulaire a été soumis
+// Configuration du système de blocage
+const MAX_ATTEMPTS = 2; // Nombre maximum de tentatives
+const BLOCK_DURATION = 300; // Durée de blocage en secondes (5 minutes)
+
+// Fonction pour nettoyer les anciennes tentatives
+function cleanOldAttempts($pdo, $ip_address) {
+    $clean_sql = "DELETE FROM login_attempts WHERE ip_address = :ip AND attempt_time < (NOW() - INTERVAL 1 HOUR)";
+    $clean_stmt = $pdo->prepare($clean_sql);
+    $clean_stmt->bindParam(':ip', $ip_address);
+    $clean_stmt->execute();
+}
+
+// Fonction pour vérifier si l'IP est bloquée
+function isBlocked($pdo, $ip_address) {
+    cleanOldAttempts($pdo, $ip_address);
+    
+    $check_sql = "SELECT COUNT(*) as attempt_count, MAX(attempt_time) as last_attempt 
+                  FROM login_attempts 
+                  WHERE ip_address = :ip AND attempt_time > (NOW() - INTERVAL " . BLOCK_DURATION . " SECOND)";
+    $check_stmt = $pdo->prepare($check_sql);
+    $check_stmt->bindParam(':ip', $ip_address);
+    $check_stmt->execute();
+    $result = $check_stmt->fetch();
+    
+    if ($result['attempt_count'] >= MAX_ATTEMPTS) {
+        $last_attempt_time = strtotime($result['last_attempt']);
+        $block_end_time = $last_attempt_time + BLOCK_DURATION;
+        $remaining_time = $block_end_time - time();
+        
+        if ($remaining_time > 0) {
+            $_SESSION['block_time_remaining'] = $remaining_time;
+            return true;
+        }
+    }
+    
+    return false;
+}
+
+// Fonction pour enregistrer une tentative échouée
+function recordFailedAttempt($pdo, $ip_address, $identifier) {
+    $insert_sql = "INSERT INTO login_attempts (ip_address, identifier, attempt_time) VALUES (:ip, :identifier, NOW())";
+    $insert_stmt = $pdo->prepare($insert_sql);
+    $insert_stmt->bindParam(':ip', $ip_address);
+    $insert_stmt->bindParam(':identifier', $identifier);
+    $insert_stmt->execute();
+}
+
+// Fonction pour compter les tentatives récentes
+function getRecentAttempts($pdo, $ip_address) {
+    $count_sql = "SELECT COUNT(*) as attempt_count 
+                  FROM login_attempts 
+                  WHERE ip_address = :ip AND attempt_time > (NOW() - INTERVAL " . BLOCK_DURATION . " SECOND)";
+    $count_stmt = $pdo->prepare($count_sql);
+    $count_stmt->bindParam(':ip', $ip_address);
+    $count_stmt->execute();
+    $result = $count_stmt->fetch();
+    return $result['attempt_count'];
+}
+
+// Fonction pour supprimer les tentatives après une connexion réussie
+function clearFailedAttempts($pdo, $ip_address) {
+    $clear_sql = "DELETE FROM login_attempts WHERE ip_address = :ip";
+    $clear_stmt = $pdo->prepare($clear_sql);
+    $clear_stmt->bindParam(':ip', $ip_address);
+    $clear_stmt->execute();
+}
+
+// Obtenir l'adresse IP du client
+$ip_address = $_SERVER['REMOTE_ADDR'] ?? $_SERVER['HTTP_X_FORWARDED_FOR'] ?? 'unknown';
+
+// Créer la table des tentatives de connexion si elle n'existe pas
+$create_table_sql = "CREATE TABLE IF NOT EXISTS login_attempts (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    ip_address VARCHAR(45) NOT NULL,
+    identifier VARCHAR(255),
+    attempt_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    INDEX idx_ip_time (ip_address, attempt_time)
+)";
+$pdo->exec($create_table_sql);
+
+// Vérifier si l'IP est bloquée
+if (isBlocked($pdo, $ip_address)) {
+    $_SESSION['account_blocked'] = true;
+    $_SESSION['login_error'] = "Trop de tentatives de connexion échouées. Accès temporairement bloqué.";
+    header("Location: loginForm.php");
+    exit;
+}
+
+// Nettoyer les variables de session de blocage
+unset($_SESSION['account_blocked']);
+unset($_SESSION['block_time_remaining']);
+
+// Vérifier si le formulaire a été soumis
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Récupère et sécurise les données du formulaire
-    $identifier = trim($_POST['identifier'] ?? ''); // Email OU identifiant
+    // Récupérer et sécuriser les données du formulaire
+    $identifier = trim($_POST['identifier'] ?? '');
     $password = trim($_POST['password'] ?? '');
 
     // Validation basique
     if (empty($identifier) || empty($password)) {
         $_SESSION['login_error'] = "Veuillez remplir tous les champs.";
-        header("Location: login.php");
+        header("Location: loginForm.php");
         exit;
     }
 
-    // Variable pour stocker les informations de l'utilisateur trouvé
+    // Variables pour stocker les informations de l'utilisateur trouvé
     $user_found = false;
     $user_data = null;
     $user_type = null;
@@ -133,8 +225,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         // Vérifier si un utilisateur a été trouvé
         if (!$user_found) {
-            $_SESSION['login_error'] = "Identifiant/email ou mot de passe incorrect.";
-            header("Location: login.php");
+            recordFailedAttempt($pdo, $ip_address, $identifier);
+            $recent_attempts = getRecentAttempts($pdo, $ip_address);
+            $remaining_attempts = MAX_ATTEMPTS - $recent_attempts;
+            
+            if ($remaining_attempts <= 0) {
+                $_SESSION['account_blocked'] = true;
+                $_SESSION['login_error'] = "Trop de tentatives de connexion échouées. Accès temporairement bloqué.";
+            } else {
+                $_SESSION['attempts_remaining'] = $remaining_attempts;
+                $_SESSION['login_error'] = "Identifiant/email ou mot de passe incorrect.";
+            }
+            header("Location: loginForm.php");
             exit;
         }
 
@@ -167,12 +269,30 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
 
         if (!$password_valid) {
-            $_SESSION['login_error'] = "Mot de passe incorrect.";
-            header("Location: login.php");
+            recordFailedAttempt($pdo, $ip_address, $identifier);
+            $recent_attempts = getRecentAttempts($pdo, $ip_address);
+            $remaining_attempts = MAX_ATTEMPTS - $recent_attempts;
+            
+            if ($remaining_attempts <= 0) {
+                $_SESSION['account_blocked'] = true;
+                $_SESSION['login_error'] = "Trop de tentatives de connexion échouées. Accès temporairement bloqué.";
+            } else {
+                $_SESSION['attempts_remaining'] = $remaining_attempts;
+                $_SESSION['login_error'] = "Mot de passe incorrect.";
+            }
+            header("Location: loginForm.php");
             exit;
         }
 
-        // AUTHENTIFICATION RÉUSSIE - CRÉATION DE LA SESSION
+        // AUTHENTIFICATION RÉUSSIE - Supprimer les tentatives échouées
+        clearFailedAttempts($pdo, $ip_address);
+        
+        // Nettoyer les variables de session liées aux tentatives
+        unset($_SESSION['attempts_remaining']);
+        unset($_SESSION['account_blocked']);
+        unset($_SESSION['block_time_remaining']);
+
+        // CRÉATION DE LA SESSION
         $_SESSION['loggedin'] = TRUE;
         $_SESSION['id_util'] = $user_data['id_util'];
         $_SESSION['login_util'] = $user_data['login_util'];
@@ -217,7 +337,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $redirect_url = 'dashboard_enseignant.php';
                 break;
             case 'Etudiant':
-                $redirect_url = 'dashboard_etudiant.php';
+                $redirect_url = 'informations_personnelles.php';
                 break;
             case 'Doyen':
                 $redirect_url = 'dashboard_doyen.php';
@@ -240,14 +360,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         // Erreur lors de l'exécution de la requête
         $_SESSION['login_error'] = "Une erreur s'est produite lors de la connexion. Veuillez réessayer.";
         error_log("Erreur login: " . $e->getMessage());
-        header("Location: login.php");
+        header("Location: loginForm.php");
         exit;
     }
 
 } else {
     // Si le formulaire n'a pas été soumis via POST, redirige vers la page de connexion
     $_SESSION['login_error'] = "Accès non autorisé.";
-    header("Location: login.php");
+    header("Location: loginForm.php");
     exit;
 }
 ?>

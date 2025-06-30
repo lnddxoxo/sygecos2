@@ -134,17 +134,17 @@ try {
             --primary-800: #1e293b;
             --primary-900: #0f172a;
 
-            /* Couleurs d'Accent Vert pour différencier */
-            --accent-50: #f0fdf4;
-            --accent-100: #dcfce7;
-            --accent-200: #bbf7d0;
-            --accent-300: #86efac;
-            --accent-400: #4ade80;
-            --accent-500: #22c55e;
-            --accent-600: #16a34a;
-            --accent-700: #15803d;
-            --accent-800: #166534;
-            --accent-900: #14532d;
+            /* Couleurs d'Accent Bleu */
+            --accent-50: #eff6ff;
+            --accent-100: #dbeafe;
+            --accent-200: #bfdbfe;
+            --accent-300: #93c5fd;
+            --accent-400: #60a5fa;
+            --accent-500: #3b82f6;
+            --accent-600: #2563eb;
+            --accent-700: #1d4ed8;
+            --accent-800: #1e40af;
+            --accent-900: #1e3a8a;
 
             /* Couleurs Secondaires */
             --secondary-50: #f0fdf4;
@@ -246,170 +246,6 @@ try {
 
         .main-content.sidebar-collapsed {
             margin-left: var(--sidebar-collapsed-width);
-        }
-
-        /* === SIDEBAR === */
-        .sidebar {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: var(--sidebar-width);
-            height: 100vh;
-            background: linear-gradient(180deg, var(--primary-800) 0%, var(--primary-900) 100%);
-            color: white;
-            z-index: 1000;
-            transition: all var(--transition-normal);
-            overflow-y: auto;
-            overflow-x: hidden;
-        }
-
-        .sidebar.collapsed {
-            width: var(--sidebar-collapsed-width);
-        }
-
-        .sidebar::-webkit-scrollbar {
-            width: 4px;
-        }
-
-        .sidebar::-webkit-scrollbar-track {
-            background: var(--primary-900);
-        }
-
-        .sidebar::-webkit-scrollbar-thumb {
-            background: var(--primary-600);
-            border-radius: 2px;
-        }
-
-        .sidebar-header {
-            padding: var(--space-6) var(--space-6);
-            border-bottom: 1px solid var(--primary-700);
-            display: flex;
-            align-items: center;
-            gap: var(--space-3);
-        }
-
-        .sidebar-logo {
-            width: 40px;
-            height: 40px;
-            background: var(--accent-500);
-            border-radius: var(--radius-lg);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-shrink: 0;
-        }
-
-        .sidebar-logo img {
-            width: 28px;
-            height: 28px;
-            object-fit: contain;
-            filter: brightness(0) invert(1);
-        }
-
-        .sidebar-title {
-            font-size: var(--text-xl);
-            font-weight: 700;
-            white-space: nowrap;
-            opacity: 1;
-            transition: opacity var(--transition-normal);
-        }
-
-        .sidebar.collapsed .sidebar-title {
-            opacity: 0;
-        }
-
-        .sidebar-nav {
-            padding: var(--space-4) 0;
-        }
-
-        .nav-section {
-            margin-bottom: var(--space-6);
-        }
-
-        .nav-section-title {
-            padding: var(--space-2) var(--space-6);
-            font-size: var(--text-xs);
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            color: var(--primary-400);
-            white-space: nowrap;
-            opacity: 1;
-            transition: opacity var(--transition-normal);
-        }
-
-        .sidebar.collapsed .nav-section-title {
-            opacity: 0;
-        }
-
-        .nav-item {
-            margin-bottom: var(--space-1);
-        }
-
-        .nav-link {
-            display: flex;
-            align-items: center;
-            padding: var(--space-3) var(--space-6);
-            color: var(--primary-200);
-            text-decoration: none;
-            transition: all var(--transition-fast);
-            position: relative;
-            gap: var(--space-3);
-        }
-
-        .nav-link:hover {
-            background: rgba(255, 255, 255, 0.1);
-            color: white;
-        }
-
-        .nav-link.active {
-            background: var(--accent-600);
-            color: white;
-        }
-
-        .nav-link.active::before {
-            content: '';
-            position: absolute;
-            left: 0;
-            top: 0;
-            bottom: 0;
-            width: 4px;
-            background: var(--accent-300);
-        }
-
-        .nav-icon {
-            width: 20px;
-            height: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-shrink: 0;
-        }
-
-        .nav-text {
-            white-space: nowrap;
-            opacity: 1;
-            transition: opacity var(--transition-normal);
-        }
-
-        .sidebar.collapsed .nav-text {
-            opacity: 0;
-        }
-
-        .nav-submenu {
-            margin-left: var(--space-8);
-            margin-top: var(--space-2);
-            border-left: 2px solid var(--primary-700);
-            padding-left: var(--space-4);
-        }
-
-        .sidebar.collapsed .nav-submenu {
-            display: none;
-        }
-
-        .nav-submenu .nav-link {
-            padding: var(--space-2) var(--space-4);
-            font-size: var(--text-sm);
         }
 
         /* === TOPBAR === */
@@ -557,7 +393,7 @@ try {
             padding: var(--space-6);
             box-shadow: var(--shadow-sm);
             border: 1px solid var(--gray-200);
-            margin-bottom: var(--space-8);
+            margin-bottom: var(--space-6);
         }
 
         .form-card-title {
@@ -600,7 +436,7 @@ try {
         .form-group input[type="text"]:focus {
             outline: none;
             border-color: var(--accent-500);
-            box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.2);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
         }
 
         .form-actions {
@@ -645,6 +481,91 @@ try {
             background-color: var(--gray-300);
         }
 
+        /* Barre de recherche */
+        .search-bar {
+            background: var(--white);
+            border-radius: var(--radius-xl);
+            padding: var(--space-4) var(--space-6);
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--gray-200);
+            margin-bottom: var(--space-6);
+            display: flex;
+            align-items: center;
+            gap: var(--space-4);
+        }
+
+        .search-input-container {
+            flex: 1;
+            position: relative;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: var(--space-3) var(--space-10);
+            border: 1px solid var(--gray-300);
+            border-radius: var(--radius-lg);
+            font-size: var(--text-base);
+            color: var(--gray-800);
+            transition: all var(--transition-fast);
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--accent-500);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: var(--space-3);
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--gray-400);
+        }
+
+        .search-button {
+            padding: var(--space-3) var(--space-5);
+            border-radius: var(--radius-lg);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all var(--transition-fast);
+            border: none;
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-2);
+            background-color: var(--accent-600);
+            color: white;
+        }
+
+        .search-button:hover {
+            background-color: var(--accent-700);
+        }
+
+        .download-buttons {
+            display: flex;
+            gap: var(--space-3);
+        }
+
+        .download-button {
+            padding: var(--space-2) var(--space-3);
+            border-radius: var(--radius-md);
+            font-size: var(--text-sm);
+            font-weight: 500;
+            cursor: pointer;
+            transition: all var(--transition-fast);
+            border: 1px solid var(--gray-300);
+            background-color: var(--white);
+            color: var(--gray-700);
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-2);
+        }
+
+        .download-button:hover {
+            background-color: var(--gray-100);
+            border-color: var(--gray-400);
+        }
+
         .table-card {
             background: var(--white);
             border-radius: var(--radius-xl);
@@ -673,6 +594,7 @@ try {
 
         .table-container {
             overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
         }
 
         .data-table {
@@ -680,6 +602,7 @@ try {
             border-collapse: collapse;
             font-size: var(--text-sm);
             color: var(--gray-800);
+            min-width: 600px;
         }
 
         .data-table th,
@@ -715,6 +638,11 @@ try {
             transition: all var(--transition-fast);
             border: none;
             color: white;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 30px;
+            min-height: 30px;
         }
 
         .action-button.edit {
@@ -791,36 +719,145 @@ try {
             transform: rotate(45deg);
         }
 
-        /* Messages d'alerte */
-        .alert {
-            padding: var(--space-4);
+        /* Filtre dropdown */
+        .filter-dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .filter-button {
+            padding: var(--space-3);
             border-radius: var(--radius-md);
-            margin-bottom: var(--space-4);
+            background-color: var(--gray-200);
+            color: var(--gray-700);
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: var(--space-2);
+            transition: all var(--transition-fast);
+        }
+
+        .filter-button:hover {
+            background-color: var(--gray-300);
+        }
+
+        .filter-dropdown-content {
             display: none;
+            position: absolute;
+            right: 0;
+            background-color: var(--white);
+            min-width: 200px;
+            box-shadow: var(--shadow-md);
+            border-radius: var(--radius-md);
+            z-index: 100;
+            padding: var(--space-2);
+            border: 1px solid var(--gray-200);
         }
 
-        .alert.success {
-            background-color: var(--secondary-50);
-            color: var(--secondary-600);
-            border: 1px solid var(--secondary-100);
+        .filter-dropdown-content.show {
+            display: block;
         }
 
-        .alert.error {
-            background-color: #fef2f2;
+        .filter-option {
+            padding: var(--space-3);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: var(--space-2);
+            border-radius: var(--radius-sm);
+            transition: background-color var(--transition-fast);
+        }
+
+        .filter-option:hover {
+            background-color: var(--gray-100);
+        }
+
+        /* Modal de message */
+        .message-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .message-modal-content {
+            background-color: var(--white);
+            padding: var(--space-6);
+            border-radius: var(--radius-xl);
+            box-shadow: var(--shadow-xl);
+            max-width: 400px;
+            width: 90%;
+            text-align: center;
+            position: relative;
+        }
+
+        .message-icon {
+            font-size: 2.5rem;
+            margin-bottom: var(--space-4);
+        }
+
+        .message-icon.success {
+            color: var(--success-500);
+        }
+
+        .message-icon.error {
             color: var(--error-500);
-            border: 1px solid #fecaca;
         }
 
-        .alert.warning {
-            background-color: #fffbeb;
-            color: #92400e;
-            border: 1px solid #fed7aa;
+        .message-icon.warning {
+            color: var(--warning-500);
         }
 
-        .alert.info {
-            background-color: var(--accent-50);
-            color: var(--accent-700);
-            border: 1px solid var(--accent-200);
+        .message-icon.info {
+            color: var(--info-500);
+        }
+
+        .message-title {
+            font-size: var(--text-xl);
+            font-weight: 600;
+            margin-bottom: var(--space-2);
+        }
+
+        .message-text {
+            margin-bottom: var(--space-4);
+            color: var(--gray-600);
+        }
+
+        .message-close {
+            position: absolute;
+            top: var(--space-3);
+            right: var(--space-3);
+            background: none;
+            border: none;
+            font-size: var(--text-lg);
+            cursor: pointer;
+            color: var(--gray-500);
+        }
+
+        .message-close:hover {
+            color: var(--gray-700);
+        }
+
+        .message-button {
+            padding: var(--space-3) var(--space-6);
+            border-radius: var(--radius-md);
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            background-color: var(--accent-600);
+            color: white;
+            transition: background-color var(--transition-fast);
+        }
+
+        .message-button:hover {
+            background-color: var(--accent-700);
         }
 
         /* Loading spinner */
@@ -829,45 +866,179 @@ try {
             pointer-events: none;
         }
 
+        /* Mobile menu overlay */
+        .mobile-menu-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+            display: none;
+        }
+
         /* === RESPONSIVE === */
-        @media (max-width: 768px) {
+        @media (max-width: 1024px) {
+            .main-content {
+                margin-left: var(--sidebar-collapsed-width);
+            }
+            
             .sidebar {
-                transform: translateX(-100%);
+                width: var(--sidebar-collapsed-width);
             }
-
-            .sidebar.mobile {
-                transform: translateX(0);
+            
+            .sidebar-title,
+            .nav-text,
+            .nav-section-title {
+                opacity: 0;
+                pointer-events: none;
             }
+            
+            .nav-link {
+                justify-content: center;
+            }
+            
+            .sidebar-toggle .fa-bars {
+                display: none;
+            }
+            
+            .sidebar-toggle .fa-times {
+                display: inline-block;
+            }
+        }
 
+        @media (max-width: 768px) {
+            .admin-layout {
+                position: relative;
+            }
+            
             .main-content {
                 margin-left: 0;
             }
-
-            .main-content.sidebar-collapsed {
-                margin-left: 0;
+            
+            .sidebar {
+                position: fixed;
+                left: -100%;
+                transition: left var(--transition-normal);
+                z-index: 1000;
+                height: 100vh;
+                overflow-y: auto;
             }
-
+            
+            .sidebar.mobile-open {
+                left: 0;
+            }
+            
+            .mobile-menu-overlay.active {
+                display: block;
+            }
+            
+            .sidebar-toggle .fa-bars {
+                display: inline-block;
+            }
+            
+            .sidebar-toggle .fa-times {
+                display: none;
+            }
+            
             .form-grid {
                 grid-template-columns: 1fr;
+            }
+            
+            .table-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: var(--space-4);
+            }
+            
+            .table-actions {
+                width: 100%;
+                justify-content: flex-end;
+                margin-top: var(--space-4);
+            }
+            
+            .search-bar {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .download-buttons {
+                width: 100%;
+                justify-content: flex-end;
+            }
+            
+            .btn {
+                padding: var(--space-2) var(--space-3);
+                font-size: var(--text-sm);
+            }
+
+            .filter-dropdown-content {
+                left: 0;
+                right: auto;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .page-content {
+                padding: var(--space-4);
+            }
+            
+            .form-card,
+            .table-card,
+            .search-bar {
+                padding: var(--space-4);
+            }
+            
+            .page-title-main {
+                font-size: var(--text-2xl);
+            }
+            
+            .page-subtitle {
+                font-size: var(--text-base);
+            }
+            
+            .form-actions {
+                flex-direction: column;
+                gap: var(--space-2);
+            }
+            
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .table-actions {
+                flex-wrap: wrap;
+                gap: var(--space-2);
+            }
+            
+            .action-buttons {
+                flex-wrap: wrap;
+            }
+            
+            .search-button {
+                width: 100%;
+                justify-content: center;
             }
         }
     </style>
 </head>
 <body>
     <div class="admin-layout">
+    
         <?php include 'sidebar.php'; ?>
 
         <main class="main-content" id="mainContent">
-            <?php include 'topbar.php'; ?>
+    <?php include 'topbar.php'; ?>  
+
+    <div class="page-content">
 
             <div class="page-content">
                 <div class="page-header">
                     <h1 class="page-title-main">Gestion des Types d'Utilisateur</h1>
                     <p class="page-subtitle">Gérez les différents types d'utilisateur du système SYGECOS.</p>
                 </div>
-
-                <!-- Message d'alerte -->
-                <div id="alertMessage" class="alert"></div>
 
                 <div class="form-card">
                     <h3 class="form-card-title">Ajouter un nouveau Type d'Utilisateur</h3>
@@ -889,18 +1060,59 @@ try {
                     </form>
                 </div>
 
+                <!-- Barre de recherche -->
+                <div class="search-bar">
+                    <div class="search-input-container">
+                        <i class="fas fa-search search-icon"></i>
+                        <input type="text" id="searchInput" class="search-input" placeholder="Rechercher un type d'utilisateur...">
+                    </div>
+                    <button class="search-button" id="searchButton">
+                        <i class="fas fa-search"></i> Rechercher
+                    </button>
+                    <div class="download-buttons">
+                        <button class="download-button" id="exportPdfBtn">
+                            <i class="fas fa-file-pdf"></i> PDF
+                        </button>
+                        <button class="download-button" id="exportExcelBtn">
+                            <i class="fas fa-file-excel"></i> Excel
+                        </button>
+                        <button class="download-button" id="exportCsvBtn">
+                            <i class="fas fa-file-csv"></i> CSV
+                        </button>
+                    </div>
+                </div>
+
                 <div class="table-card">
                     <div class="table-header">
                         <h3 class="table-title">Liste des Types d'Utilisateur</h3>
                         <div class="table-actions">
+                            <div class="filter-dropdown">
+                                <button class="filter-button" id="filterButton">
+                                    <i class="fas fa-filter"></i> Filtres
+                                </button>
+                                <div class="filter-dropdown-content" id="filterDropdown">
+                                    <div class="filter-option" data-filter="all">
+                                        <i class="fas fa-list"></i> Tous les types
+                                    </div>
+                                    <div class="filter-option" data-filter="id-asc">
+                                        <i class="fas fa-sort-numeric-down"></i> Tri par ID (croissant)
+                                    </div>
+                                    <div class="filter-option" data-filter="id-desc">
+                                        <i class="fas fa-sort-numeric-up"></i> Tri par ID (décroissant)
+                                    </div>
+                                    <div class="filter-option" data-filter="name-asc">
+                                        <i class="fas fa-sort-alpha-down"></i> Tri par nom (A-Z)
+                                    </div>
+                                    <div class="filter-option" data-filter="name-desc">
+                                        <i class="fas fa-sort-alpha-up"></i> Tri par nom (Z-A)
+                                    </div>
+                                </div>
+                            </div>
                             <button class="btn btn-secondary" id="modifierTypeBtn" disabled>
-                                <i class="fas fa-edit"></i> Modifier
+                                <i class="fas fa-edit"></i> <span class="action-text">Modifier</span>
                             </button>
                             <button class="btn btn-secondary" id="supprimerTypeBtn" disabled>
-                                <i class="fas fa-trash-alt"></i> Supprimer
-                            </button>
-                            <button class="btn btn-secondary" id="exporterTypeBtn">
-                                <i class="fas fa-file-export"></i> Exporter
+                                <i class="fas fa-trash-alt"></i> <span class="action-text">Supprimer</span>
                             </button>
                         </div>
                     </div>
@@ -954,11 +1166,25 @@ try {
         </main>
     </div>
 
+    <!-- Modal pour les messages -->
+    <div class="message-modal" id="messageModal">
+        <div class="message-modal-content">
+            <button class="message-close" id="messageClose">&times;</button>
+            <div class="message-icon" id="messageIcon"></div>
+            <h3 class="message-title" id="messageTitle"></h3>
+            <p class="message-text" id="messageText"></p>
+            <button class="message-button" id="messageButton">OK</button>
+        </div>
+    </div>
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
     <script>
         // Variables globales
         let selectedTypes = new Set();
         let editingType = null;
+        const { jsPDF } = window.jspdf;
 
         // Éléments DOM
         const typeForm = document.getElementById('typeForm');
@@ -966,32 +1192,116 @@ try {
         const typeTableBody = document.querySelector('#typeTable tbody');
         const modifierTypeBtn = document.getElementById('modifierTypeBtn');
         const supprimerTypeBtn = document.getElementById('supprimerTypeBtn');
-        const exporterTypeBtn = document.getElementById('exporterTypeBtn');
+        const exportPdfBtn = document.getElementById('exportPdfBtn');
+        const exportExcelBtn = document.getElementById('exportExcelBtn');
+        const exportCsvBtn = document.getElementById('exportCsvBtn');
         const submitBtn = document.getElementById('submitBtn');
         const submitText = document.getElementById('submitText');
         const cancelBtn = document.getElementById('cancelBtn');
-        const alertMessage = document.getElementById('alertMessage');
-
-        // Gestion du toggle sidebar
         const sidebarToggle = document.getElementById('sidebarToggle');
         const sidebar = document.getElementById('sidebar');
+        const mobileMenuOverlay = document.getElementById('mobileMenuOverlay');
         const mainContent = document.getElementById('mainContent');
+        const searchInput = document.getElementById('searchInput');
+        const searchButton = document.getElementById('searchButton');
+        const filterButton = document.getElementById('filterButton');
+        const filterDropdown = document.getElementById('filterDropdown');
+        const filterOptions = document.querySelectorAll('.filter-option');
+        const messageModal = document.getElementById('messageModal');
+        const messageTitle = document.getElementById('messageTitle');
+        const messageText = document.getElementById('messageText');
+        const messageIcon = document.getElementById('messageIcon');
+        const messageButton = document.getElementById('messageButton');
+        const messageClose = document.getElementById('messageClose');
 
-        if (sidebarToggle) {
-            sidebarToggle.addEventListener('click', function() {
-                sidebar.classList.toggle('collapsed');
-                mainContent.classList.toggle('sidebar-collapsed');
-            });
+        // Fonction pour afficher les messages dans une modal
+        function showAlert(message, type = 'success', title = null) {
+            // Définir le titre par défaut en fonction du type
+            if (!title) {
+                switch (type) {
+                    case 'success':
+                        title = 'Succès';
+                        break;
+                    case 'error':
+                        title = 'Erreur';
+                        break;
+                    case 'warning':
+                        title = 'Attention';
+                        break;
+                    case 'info':
+                        title = 'Information';
+                        break;
+                    default:
+                        title = 'Message';
+                }
+            }
+
+            // Définir l'icône en fonction du type
+            messageIcon.className = 'message-icon';
+            switch (type) {
+                case 'success':
+                    messageIcon.classList.add('success');
+                    messageIcon.innerHTML = '<i class="fas fa-check-circle"></i>';
+                    break;
+                case 'error':
+                    messageIcon.classList.add('error');
+                    messageIcon.innerHTML = '<i class="fas fa-exclamation-circle"></i>';
+                    break;
+                case 'warning':
+                    messageIcon.classList.add('warning');
+                    messageIcon.innerHTML = '<i class="fas fa-exclamation-triangle"></i>';
+                    break;
+                case 'info':
+                    messageIcon.classList.add('info');
+                    messageIcon.innerHTML = '<i class="fas fa-info-circle"></i>';
+                    break;
+                default:
+                    messageIcon.innerHTML = '<i class="fas fa-bell"></i>';
+            }
+
+            messageTitle.textContent = title;
+            messageText.textContent = message;
+            messageModal.style.display = 'flex';
         }
 
-        // Fonction pour afficher les messages
-        function showAlert(message, type = 'success') {
-            alertMessage.textContent = message;
-            alertMessage.className = `alert ${type}`;
-            alertMessage.style.display = 'block';
-            setTimeout(() => {
-                alertMessage.style.display = 'none';
-            }, 5000);
+        // Fermer la modal
+        function closeMessageModal() {
+            messageModal.style.display = 'none';
+        }
+
+        // Événements pour la modal
+        messageButton.addEventListener('click', closeMessageModal);
+        messageClose.addEventListener('click', closeMessageModal);
+        messageModal.addEventListener('click', function(e) {
+            if (e.target === messageModal) {
+                closeMessageModal();
+            }
+        });
+
+        // Gestion du toggle sidebar pour mobile
+        function toggleSidebar() {
+            sidebar.classList.toggle('mobile-open');
+            mobileMenuOverlay.classList.toggle('active');
+            
+            // Basculer entre les icônes menu/fermer
+            const barsIcon = sidebarToggle.querySelector('.fa-bars');
+            const timesIcon = sidebarToggle.querySelector('.fa-times');
+            
+            if (sidebar.classList.contains('mobile-open')) {
+                barsIcon.style.display = 'none';
+                timesIcon.style.display = 'inline-block';
+            } else {
+                barsIcon.style.display = 'inline-block';
+                timesIcon.style.display = 'none';
+            }
+        }
+
+        if (sidebarToggle) {
+            sidebarToggle.addEventListener('click', toggleSidebar);
+        }
+
+        if (mobileMenuOverlay) {
+            mobileMenuOverlay.addEventListener('click', toggleSidebar);
         }
 
         // Fonction pour faire une requête AJAX
@@ -1070,6 +1380,83 @@ try {
                 }
                 updateActionButtons();
             });
+        }
+
+        // Fonction de recherche
+        function searchTypes() {
+            const searchTerm = searchInput.value.toLowerCase();
+            const rows = typeTableBody.querySelectorAll('tr');
+            
+            rows.forEach(row => {
+                if (row.querySelector('td[colspan="4"]')) return; // Ignorer le message vide
+                
+                const libType = row.cells[2].textContent.toLowerCase();
+                const idType = row.cells[1].textContent.toLowerCase();
+                
+                if (libType.includes(searchTerm) || idType.includes(searchTerm)) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        }
+
+        // Fonction pour appliquer les filtres
+        function applyFilter(filterType) {
+            const rows = Array.from(typeTableBody.querySelectorAll('tr'));
+            
+            // Supprimer le message "Aucun type trouvé" s'il existe
+            const emptyRow = typeTableBody.querySelector('td[colspan="4"]');
+            if (emptyRow) {
+                emptyRow.closest('tr').remove();
+            }
+            
+            // Afficher toutes les lignes avant d'appliquer le filtre
+            rows.forEach(row => {
+                if (!row.querySelector('td[colspan="4"]')) {
+                    row.style.display = '';
+                }
+            });
+            
+            // Trier les lignes selon le filtre
+            rows.sort((a, b) => {
+                if (a.querySelector('td[colspan="4"]') || b.querySelector('td[colspan="4"]')) return 0;
+                
+                const idA = parseInt(a.cells[1].textContent);
+                const idB = parseInt(b.cells[1].textContent);
+                const libA = a.cells[2].textContent.toLowerCase();
+                const libB = b.cells[2].textContent.toLowerCase();
+                
+                switch (filterType) {
+                    case 'id-asc':
+                        return idA - idB;
+                    case 'id-desc':
+                        return idB - idA;
+                    case 'name-asc':
+                        return libA.localeCompare(libB);
+                    case 'name-desc':
+                        return libB.localeCompare(libA);
+                    default:
+                        return 0;
+                }
+            });
+            
+            // Réorganiser les lignes dans le DOM
+            rows.forEach(row => {
+                typeTableBody.appendChild(row);
+            });
+            
+            // Si aucune ligne après filtrage, afficher le message
+            if (rows.length === 0 || (rows.length === 1 && rows[0].querySelector('td[colspan="4"]'))) {
+                typeTableBody.innerHTML = `
+                    <tr>
+                        <td colspan="4" style="text-align: center; color: var(--gray-500); padding: var(--space-8);">
+                            <i class="fas fa-layer-group" style="font-size: 2rem; margin-bottom: var(--space-2);"></i><br>
+                            Aucun type d'utilisateur trouvé. Ajoutez votre premier type en utilisant le formulaire ci-dessus.
+                        </td>
+                    </tr>
+                `;
+            }
         }
 
         // Soumission du formulaire
@@ -1236,15 +1623,58 @@ try {
             }
         });
 
-        // Bouton Exporter Excel
-        exporterTypeBtn.addEventListener('click', function() {
-            // Vérifier s'il y a des types à exporter
-            const rows = document.querySelectorAll('#typeTable tbody tr');
-            if (rows.length === 1 && rows[0].querySelector('td[colspan="4"]')) {
-                showAlert('Aucun type à exporter', 'warning');
-                return;
-            }
+        // Fonction pour exporter en PDF
+        function exportToPdf() {
+            const doc = new jsPDF();
+            const title = "Liste des Types d'Utilisateur";
+            const date = new Date().toLocaleDateString();
+            
+            // Titre
+            doc.setFontSize(18);
+            doc.text(title, 14, 20);
+            
+            // Date
+            doc.setFontSize(10);
+            doc.text(`Exporté le: ${date}`, 14, 30);
+            
+            // Tableau
+            const headers = [['ID', 'Libellé du Type']];
+            const data = [];
+            
+            document.querySelectorAll('#typeTable tbody tr').forEach(row => {
+                if (!row.querySelector('td[colspan="4"]')) {
+                    data.push([
+                        row.cells[1].textContent,
+                        row.cells[2].textContent
+                    ]);
+                }
+            });
+            
+            doc.autoTable({
+                head: headers,
+                body: data,
+                startY: 40,
+                styles: {
+                    fontSize: 10,
+                    cellPadding: 3,
+                    valign: 'middle'
+                },
+                headStyles: {
+                    fillColor: [59, 130, 246],
+                    textColor: 255,
+                    fontStyle: 'bold'
+                },
+                alternateRowStyles: {
+                    fillColor: [241, 245, 249]
+                }
+            });
+            
+            doc.save(`types_utilisateur_${new Date().toISOString().split('T')[0]}.pdf`);
+            showAlert('Exportation PDF terminée');
+        }
 
+        // Fonction pour exporter en Excel
+        function exportToExcel() {
             // Créer les données pour Excel
             const data = [['ID', 'Libellé du Type']];
             
@@ -1266,6 +1696,64 @@ try {
             XLSX.writeFile(wb, `types_utilisateur_${new Date().toISOString().split('T')[0]}.xlsx`);
             
             showAlert('Exportation Excel terminée');
+        }
+
+        // Fonction pour exporter en CSV
+        function exportToCsv() {
+            let csv = "ID,Libellé du Type\n";
+            
+            document.querySelectorAll('#typeTable tbody tr').forEach(row => {
+                if (!row.querySelector('td[colspan="4"]')) {
+                    csv += `"${row.cells[1].textContent}","${row.cells[2].textContent}"\n`;
+                }
+            });
+            
+            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            const url = URL.createObjectURL(blob);
+            
+            link.setAttribute('href', url);
+            link.setAttribute('download', `types_utilisateur_${new Date().toISOString().split('T')[0]}.csv`);
+            link.style.visibility = 'hidden';
+            
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            
+            showAlert('Exportation CSV terminée');
+        }
+
+        // Boutons d'export individuels
+        exportPdfBtn.addEventListener('click', exportToPdf);
+        exportExcelBtn.addEventListener('click', exportToExcel);
+        exportCsvBtn.addEventListener('click', exportToCsv);
+
+        // Recherche
+        searchButton.addEventListener('click', searchTypes);
+        searchInput.addEventListener('keyup', function(e) {
+            if (e.key === 'Enter') {
+                searchTypes();
+            }
+        });
+
+        // Filtres
+        filterButton.addEventListener('click', function() {
+            filterDropdown.classList.toggle('show');
+        });
+
+        filterOptions.forEach(option => {
+            option.addEventListener('click', function() {
+                const filterType = this.getAttribute('data-filter');
+                applyFilter(filterType);
+                filterDropdown.classList.remove('show');
+            });
+        });
+
+        // Fermer le dropdown si on clique ailleurs
+        window.addEventListener('click', function(e) {
+            if (!e.target.matches('.filter-button') && !e.target.closest('.filter-dropdown')) {
+                filterDropdown.classList.remove('show');
+            }
         });
 
         // Initialisation
@@ -1278,23 +1766,35 @@ try {
             });
             
             updateActionButtons();
+            
+            // Masquer les textes des boutons d'action sur mobile
+            function handleResponsiveActions() {
+                const actionTexts = document.querySelectorAll('.action-text');
+                if (window.innerWidth < 768) {
+                    actionTexts.forEach(text => {
+                        text.style.display = 'none';
+                    });
+                } else {
+                    actionTexts.forEach(text => {
+                        text.style.display = 'inline';
+                    });
+                }
+            }
+            
+            handleResponsiveActions();
+            window.addEventListener('resize', handleResponsiveActions);
         });
 
-        // Responsive: Gestion mobile
+        // Gestion du redimensionnement de la fenêtre
         function handleResize() {
-            if (window.innerWidth <= 768) {
-                if (sidebar) sidebar.classList.add('mobile');
-            } else {
-                if (sidebar) {
-                    sidebar.classList.remove('mobile');
-                    sidebar.classList.remove('collapsed');
-                }
-                if (mainContent) mainContent.classList.remove('sidebar-collapsed');
+            // Sur les grands écrans, s'assurer que la sidebar est visible
+            if (window.innerWidth >= 1024) {
+                sidebar.classList.remove('mobile-open');
+                mobileMenuOverlay.classList.remove('active');
             }
         }
 
         window.addEventListener('resize', handleResize);
-        handleResize();
     </script>
 </body>
 </html>

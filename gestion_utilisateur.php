@@ -460,170 +460,6 @@ try {
             margin-left: var(--sidebar-collapsed-width);
         }
 
-        /* === SIDEBAR === */
-        .sidebar {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: var(--sidebar-width);
-            height: 100vh;
-            background: linear-gradient(180deg, var(--primary-800) 0%, var(--primary-900) 100%);
-            color: white;
-            z-index: 1000;
-            transition: all var(--transition-normal);
-            overflow-y: auto;
-            overflow-x: hidden;
-        }
-
-        .sidebar.collapsed {
-            width: var(--sidebar-collapsed-width);
-        }
-
-        .sidebar::-webkit-scrollbar {
-            width: 4px;
-        }
-
-        .sidebar::-webkit-scrollbar-track {
-            background: var(--primary-900);
-        }
-
-        .sidebar::-webkit-scrollbar-thumb {
-            background: var(--primary-600);
-            border-radius: 2px;
-        }
-
-        .sidebar-header {
-            padding: var(--space-6) var(--space-6);
-            border-bottom: 1px solid var(--primary-700);
-            display: flex;
-            align-items: center;
-            gap: var(--space-3);
-        }
-
-        .sidebar-logo {
-            width: 40px;
-            height: 40px;
-            background: var(--accent-500);
-            border-radius: var(--radius-lg);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-shrink: 0;
-        }
-
-        .sidebar-logo img {
-            width: 28px;
-            height: 28px;
-            object-fit: contain;
-            filter: brightness(0) invert(1);
-        }
-
-        .sidebar-title {
-            font-size: var(--text-xl);
-            font-weight: 700;
-            white-space: nowrap;
-            opacity: 1;
-            transition: opacity var(--transition-normal);
-        }
-
-        .sidebar.collapsed .sidebar-title {
-            opacity: 0;
-        }
-
-        .sidebar-nav {
-            padding: var(--space-4) 0;
-        }
-
-        .nav-section {
-            margin-bottom: var(--space-6);
-        }
-
-        .nav-section-title {
-            padding: var(--space-2) var(--space-6);
-            font-size: var(--text-xs);
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            color: var(--primary-400);
-            white-space: nowrap;
-            opacity: 1;
-            transition: opacity var(--transition-normal);
-        }
-
-        .sidebar.collapsed .nav-section-title {
-            opacity: 0;
-        }
-
-        .nav-item {
-            margin-bottom: var(--space-1);
-        }
-
-        .nav-link {
-            display: flex;
-            align-items: center;
-            padding: var(--space-3) var(--space-6);
-            color: var(--primary-200);
-            text-decoration: none;
-            transition: all var(--transition-fast);
-            position: relative;
-            gap: var(--space-3);
-        }
-
-        .nav-link:hover {
-            background: rgba(255, 255, 255, 0.1);
-            color: white;
-        }
-
-        .nav-link.active {
-            background: var(--accent-600);
-            color: white;
-        }
-
-        .nav-link.active::before {
-            content: '';
-            position: absolute;
-            left: 0;
-            top: 0;
-            bottom: 0;
-            width: 4px;
-            background: var(--accent-300);
-        }
-
-        .nav-icon {
-            width: 20px;
-            height: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-shrink: 0;
-        }
-
-        .nav-text {
-            white-space: nowrap;
-            opacity: 1;
-            transition: opacity var(--transition-normal);
-        }
-
-        .sidebar.collapsed .nav-text {
-            opacity: 0;
-        }
-
-        .nav-submenu {
-            margin-left: var(--space-8);
-            margin-top: var(--space-2);
-            border-left: 2px solid var(--primary-700);
-            padding-left: var(--space-4);
-        }
-
-        .sidebar.collapsed .nav-submenu {
-            display: none;
-        }
-
-        .nav-submenu .nav-link {
-            padding: var(--space-2) var(--space-4);
-            font-size: var(--text-sm);
-        }
-
         /* === TOPBAR === */
         .topbar {
             height: var(--topbar-height);
@@ -769,7 +605,7 @@ try {
             padding: var(--space-6);
             box-shadow: var(--shadow-sm);
             border: 1px solid var(--gray-200);
-            margin-bottom: var(--space-8);
+            margin-bottom: var(--space-6);
         }
 
         .filter-title {
@@ -860,6 +696,91 @@ try {
             background-color: var(--success-600);
         }
 
+        /* Barre de recherche */
+        .search-bar {
+            background: var(--white);
+            border-radius: var(--radius-xl);
+            padding: var(--space-4) var(--space-6);
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--gray-200);
+            margin-bottom: var(--space-6);
+            display: flex;
+            align-items: center;
+            gap: var(--space-4);
+        }
+
+        .search-input-container {
+            flex: 1;
+            position: relative;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: var(--space-3) var(--space-10);
+            border: 1px solid var(--gray-300);
+            border-radius: var(--radius-lg);
+            font-size: var(--text-base);
+            color: var(--gray-800);
+            transition: all var(--transition-fast);
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--accent-500);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: var(--space-3);
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--gray-400);
+        }
+
+        .search-button {
+            padding: var(--space-3) var(--space-5);
+            border-radius: var(--radius-lg);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all var(--transition-fast);
+            border: none;
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-2);
+            background-color: var(--accent-600);
+            color: white;
+        }
+
+        .search-button:hover {
+            background-color: var(--accent-700);
+        }
+
+        .download-buttons {
+            display: flex;
+            gap: var(--space-3);
+        }
+
+        .download-button {
+            padding: var(--space-2) var(--space-3);
+            border-radius: var(--radius-md);
+            font-size: var(--text-sm);
+            font-weight: 500;
+            cursor: pointer;
+            transition: all var(--transition-fast);
+            border: 1px solid var(--gray-300);
+            background-color: var(--white);
+            color: var(--gray-700);
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-2);
+        }
+
+        .download-button:hover {
+            background-color: var(--gray-100);
+            border-color: var(--gray-400);
+        }
+
         .table-card {
             background: var(--white);
             border-radius: var(--radius-xl);
@@ -889,6 +810,7 @@ try {
 
         .table-container {
             overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
         }
 
         .data-table {
@@ -896,6 +818,7 @@ try {
             border-collapse: collapse;
             font-size: var(--text-sm);
             color: var(--gray-800);
+            min-width: 900px; /* Adjusted for more columns */
         }
 
         .data-table th,
@@ -931,6 +854,11 @@ try {
             transition: all var(--transition-fast);
             border: none;
             color: white;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 30px;
+            min-height: 30px;
         }
 
         .action-button.edit {
@@ -938,6 +866,13 @@ try {
         }
         .action-button.edit:hover {
             background-color: #e68a00;
+        }
+
+        .action-button.delete {
+            background-color: var(--error-500);
+        }
+        .action-button.delete:hover {
+            background-color: #cc3131;
         }
 
         /* Checkbox styling */
@@ -1000,36 +935,145 @@ try {
             transform: rotate(45deg);
         }
 
-        /* Messages d'alerte */
-        .alert {
-            padding: var(--space-4);
+        /* Filtre dropdown */
+        .filter-dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .filter-button {
+            padding: var(--space-3);
             border-radius: var(--radius-md);
-            margin-bottom: var(--space-4);
+            background-color: var(--gray-200);
+            color: var(--gray-700);
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: var(--space-2);
+            transition: all var(--transition-fast);
+        }
+
+        .filter-button:hover {
+            background-color: var(--gray-300);
+        }
+
+        .filter-dropdown-content {
             display: none;
+            position: absolute;
+            right: 0;
+            background-color: var(--white);
+            min-width: 200px;
+            box-shadow: var(--shadow-md);
+            border-radius: var(--radius-md);
+            z-index: 100;
+            padding: var(--space-2);
+            border: 1px solid var(--gray-200);
         }
 
-        .alert.success {
-            background-color: var(--secondary-50);
-            color: var(--secondary-600);
-            border: 1px solid var(--secondary-100);
+        .filter-dropdown-content.show {
+            display: block;
         }
 
-        .alert.error {
-            background-color: #fef2f2;
+        .filter-option {
+            padding: var(--space-3);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: var(--space-2);
+            border-radius: var(--radius-sm);
+            transition: background-color var(--transition-fast);
+        }
+
+        .filter-option:hover {
+            background-color: var(--gray-100);
+        }
+
+        /* Modal de message */
+        .message-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .message-modal-content {
+            background-color: var(--white);
+            padding: var(--space-6);
+            border-radius: var(--radius-xl);
+            box-shadow: var(--shadow-xl);
+            max-width: 400px;
+            width: 90%;
+            text-align: center;
+            position: relative;
+        }
+
+        .message-icon {
+            font-size: 2.5rem;
+            margin-bottom: var(--space-4);
+        }
+
+        .message-icon.success {
+            color: var(--success-500);
+        }
+
+        .message-icon.error {
             color: var(--error-500);
-            border: 1px solid #fecaca;
         }
 
-        .alert.warning {
-            background-color: #fffbeb;
-            color: #92400e;
-            border: 1px solid #fed7aa;
+        .message-icon.warning {
+            color: var(--warning-500);
         }
 
-        .alert.info {
-            background-color: var(--accent-50);
-            color: var(--accent-700);
-            border: 1px solid var(--accent-200);
+        .message-icon.info {
+            color: var(--info-500);
+        }
+
+        .message-title {
+            font-size: var(--text-xl);
+            font-weight: 600;
+            margin-bottom: var(--space-2);
+        }
+
+        .message-text {
+            margin-bottom: var(--space-4);
+            color: var(--gray-600);
+        }
+
+        .message-close {
+            position: absolute;
+            top: var(--space-3);
+            right: var(--space-3);
+            background: none;
+            border: none;
+            font-size: var(--text-lg);
+            cursor: pointer;
+            color: var(--gray-500);
+        }
+
+        .message-close:hover {
+            color: var(--gray-700);
+        }
+
+        .message-button {
+            padding: var(--space-3) var(--space-6);
+            border-radius: var(--radius-md);
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            background-color: var(--accent-600);
+            color: white;
+            transition: background-color var(--transition-fast);
+        }
+
+        .message-button:hover {
+            background-color: var(--accent-700);
         }
 
         /* Loading spinner */
@@ -1065,26 +1109,159 @@ try {
             letter-spacing: 0.05em;
         }
 
+        /* Mobile menu overlay */
+        .mobile-menu-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+            display: none;
+        }
+
         /* === RESPONSIVE === */
-        @media (max-width: 768px) {
+        @media (max-width: 1024px) {
+            .main-content {
+                margin-left: var(--sidebar-collapsed-width);
+            }
+            
             .sidebar {
-                transform: translateX(-100%);
+                width: var(--sidebar-collapsed-width);
             }
-
-            .sidebar.mobile {
-                transform: translateX(0);
+            
+            .sidebar-title,
+            .nav-text,
+            .nav-section-title {
+                opacity: 0;
+                pointer-events: none;
             }
+            
+            .nav-link {
+                justify-content: center;
+            }
+            
+            .sidebar-toggle .fa-bars {
+                display: none;
+            }
+            
+            .sidebar-toggle .fa-times {
+                display: inline-block;
+            }
+        }
 
+        @media (max-width: 768px) {
+            .admin-layout {
+                position: relative;
+            }
+            
             .main-content {
                 margin-left: 0;
             }
-
-            .main-content.sidebar-collapsed {
-                margin-left: 0;
+            
+            .sidebar {
+                position: fixed;
+                left: -100%;
+                transition: left var(--transition-normal);
+                z-index: 1000;
+                height: 100vh;
+                overflow-y: auto;
             }
-
+            
+            .sidebar.mobile-open {
+                left: 0;
+            }
+            
+            .mobile-menu-overlay.active {
+                display: block;
+            }
+            
+            .sidebar-toggle .fa-bars {
+                display: inline-block;
+            }
+            
+            .sidebar-toggle .fa-times {
+                display: none;
+            }
+            
             .filter-grid {
                 grid-template-columns: 1fr;
+            }
+            
+            .table-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: var(--space-4);
+            }
+            
+            .table-actions {
+                width: 100%;
+                justify-content: flex-end;
+                margin-top: var(--space-4);
+            }
+            
+            .search-bar {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .download-buttons {
+                width: 100%;
+                justify-content: flex-end;
+            }
+            
+            .btn {
+                padding: var(--space-2) var(--space-3);
+                font-size: var(--text-sm);
+            }
+
+            .filter-dropdown-content {
+                left: 0;
+                right: auto;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .page-content {
+                padding: var(--space-4);
+            }
+            
+            .filter-card,
+            .table-card,
+            .search-bar {
+                padding: var(--space-4);
+            }
+            
+            .page-title-main {
+                font-size: var(--text-2xl);
+            }
+            
+            .page-subtitle {
+                font-size: var(--text-base);
+            }
+            
+            .filter-grid .form-group:last-child {
+                grid-column: span 1;
+            }
+            
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .table-actions {
+                flex-wrap: wrap;
+                gap: var(--space-2);
+            }
+            
+            .action-buttons {
+                flex-wrap: wrap;
+            }
+            
+            .search-button {
+                width: 100%;
+                justify-content: center;
             }
         }
     </style>
@@ -1102,10 +1279,16 @@ try {
                     <p class="page-subtitle">Sélectionnez un type et un groupe pour générer les identifiants des utilisateurs correspondants.</p>
                 </div>
 
-                <!-- Message d'alerte -->
-                <div id="alertMessage" class="alert"></div>
+                <div class="message-modal" id="messageModal">
+                    <div class="message-modal-content">
+                        <button class="message-close" id="messageClose">&times;</button>
+                        <div class="message-icon" id="messageIcon"></div>
+                        <h3 class="message-title" id="messageTitle"></h3>
+                        <p class="message-text" id="messageText"></p>
+                        <button class="message-button" id="messageButton">OK</button>
+                    </div>
+                </div>
 
-                <!-- Section de sélection Type + Groupe -->
                 <div class="filter-card">
                     <h3 class="filter-title">Sélection Type et Groupe Utilisateur</h3>
                     <form id="selectionForm">
@@ -1136,16 +1319,52 @@ try {
                     </form>
                 </div>
 
-                <!-- Liste des utilisateurs sans identifiants -->
+                <div class="search-bar" id="searchBarSansIdentifiants" style="display: none;">
+                    <div class="search-input-container">
+                        <i class="fas fa-search search-icon"></i>
+                        <input type="text" id="searchInputSans" class="search-input" placeholder="Rechercher un utilisateur...">
+                    </div>
+                    <button class="search-button" id="searchButtonSans">
+                        <i class="fas fa-search"></i> Rechercher
+                    </button>
+                    <div class="download-buttons">
+                        <button class="download-button" id="exportPdfSansBtn">
+                            <i class="fas fa-file-pdf"></i> PDF
+                        </button>
+                        <button class="download-button" id="exportExcelSansBtn">
+                            <i class="fas fa-file-excel"></i> Excel
+                        </button>
+                        <button class="download-button" id="exportCsvSansBtn">
+                            <i class="fas fa-file-csv"></i> CSV
+                        </button>
+                    </div>
+                </div>
+
                 <div class="table-card" id="sansIdentifiantsCard" style="display: none;">
                     <div class="table-header">
                         <h3 class="table-title">Utilisateurs sans Identifiants</h3>
                         <div class="table-actions">
+                            <div class="filter-dropdown">
+                                <button class="filter-button" id="filterButtonSans">
+                                    <i class="fas fa-filter"></i> Filtres
+                                </button>
+                                <div class="filter-dropdown-content" id="filterDropdownSans">
+                                    <div class="filter-option" data-filter="all">
+                                        <i class="fas fa-list"></i> Tous les utilisateurs
+                                    </div>
+                                    <div class="filter-option" data-filter="name-asc">
+                                        <i class="fas fa-sort-alpha-down"></i> Tri par Nom (A-Z)
+                                    </div>
+                                    <div class="filter-option" data-filter="name-desc">
+                                        <i class="fas fa-sort-alpha-up"></i> Tri par Nom (Z-A)
+                                    </div>
+                                    <div class="filter-option" data-filter="type-asc">
+                                        <i class="fas fa-user-tag"></i> Tri par Type (A-Z)
+                                    </div>
+                                </div>
+                            </div>
                             <button class="btn btn-success" id="genererIdentifiantsBtn" disabled>
                                 <i class="fas fa-key"></i> Générer Identifiants
-                            </button>
-                            <button class="btn btn-secondary" id="exporterSansIdentBtn">
-                                <i class="fas fa-file-excel"></i> Exporter Excel
                             </button>
                         </div>
                     </div>
@@ -1172,27 +1391,71 @@ try {
                     </div>
                 </div>
 
-                <!-- Séparateur de section -->
                 <div class="section-separator">
                     <span>Utilisateurs avec identifiants générés</span>
                 </div>
 
-                <!-- Liste des utilisateurs avec identifiants -->
+                <div class="search-bar" id="searchBarAvecIdentifiants">
+                    <div class="search-input-container">
+                        <i class="fas fa-search search-icon"></i>
+                        <input type="text" id="searchInputAvec" class="search-input" placeholder="Rechercher un utilisateur...">
+                    </div>
+                    <button class="search-button" id="searchButtonAvec">
+                        <i class="fas fa-search"></i> Rechercher
+                    </button>
+                    <div class="download-buttons">
+                        <button class="download-button" id="exportPdfAvecBtn">
+                            <i class="fas fa-file-pdf"></i> PDF
+                        </button>
+                        <button class="download-button" id="exportExcelAvecBtn">
+                            <i class="fas fa-file-excel"></i> Excel
+                        </button>
+                        <button class="download-button" id="exportCsvAvecBtn">
+                            <i class="fas fa-file-csv"></i> CSV
+                        </button>
+                    </div>
+                </div>
+
                 <div class="table-card">
                     <div class="table-header">
                         <h3 class="table-title">Utilisateurs avec Identifiants</h3>
                         <div class="table-actions">
+                            <div class="filter-dropdown">
+                                <button class="filter-button" id="filterButtonAvec">
+                                    <i class="fas fa-filter"></i> Filtres
+                                </button>
+                                <div class="filter-dropdown-content" id="filterDropdownAvec">
+                                    <div class="filter-option" data-filter="all">
+                                        <i class="fas fa-list"></i> Tous les utilisateurs
+                                    </div>
+                                    <div class="filter-option" data-filter="id-asc">
+                                        <i class="fas fa-sort-numeric-down"></i> Tri par ID (croissant)
+                                    </div>
+                                    <div class="filter-option" data-filter="id-desc">
+                                        <i class="fas fa-sort-numeric-up"></i> Tri par ID (décroissant)
+                                    </div>
+                                    <div class="filter-option" data-filter="name-asc">
+                                        <i class="fas fa-sort-alpha-down"></i> Tri par Nom (A-Z)
+                                    </div>
+                                    <div class="filter-option" data-filter="name-desc">
+                                        <i class="fas fa-sort-alpha-up"></i> Tri par Nom (Z-A)
+                                    </div>
+                                    <div class="filter-option" data-filter="type-asc">
+                                        <i class="fas fa-user-tag"></i> Tri par Type (A-Z)
+                                    </div>
+                                    <div class="filter-option" data-filter="group-asc">
+                                        <i class="fas fa-users"></i> Tri par Groupe (A-Z)
+                                    </div>
+                                </div>
+                            </div>
                             <button class="btn btn-secondary" id="modifierAvecIdentBtn" disabled>
-                                <i class="fas fa-edit"></i> Modifier
+                                <i class="fas fa-edit"></i> <span class="action-text">Modifier</span>
                             </button>
                             <button class="btn btn-secondary" id="supprimerAvecIdentBtn" disabled>
-                                <i class="fas fa-trash-alt"></i> Supprimer
+                                <i class="fas fa-trash-alt"></i> <span class="action-text">Supprimer</span>
                             </button>
                             <button class="btn btn-secondary" id="rafraichirAvecIdentBtn">
-                                <i class="fas fa-sync-alt"></i> Rafraîchir
-                            </button>
-                            <button class="btn btn-secondary" id="exporterAvecIdentBtn">
-                                <i class="fas fa-file-excel"></i> Exporter Excel
+                                <i class="fas fa-sync-alt"></i> <span class="action-text">Rafraîchir</span>
                             </button>
                         </div>
                     </div>
@@ -1226,14 +1489,18 @@ try {
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
     <script>
         // Variables globales
-        let selectedUsers = new Set();
+        let selectedUsersSans = new Set(); // For users without credentials
+        let selectedUsersAvec = new Set(); // For users with credentials
         let currentTypeGroupe = { type: null, groupe: null };
-        let selectedUsersWithCredentials = new Set();
-        const groupesParType = <?php 
+        const groupesParType = <?php
             $groupesParType = [];
             foreach ($groupesUtilisateur as $groupe) {
+                // Ensure to fetch the id_type associated with each group_utilisateur
+                // This assumes a 'type_groupe' table links id_type and id_GU.
                 $stmt = $pdo->prepare("SELECT id_type FROM type_groupe WHERE id_GU = ?");
                 $stmt->execute([$groupe['id_GU']]);
                 $idType = $stmt->fetchColumn();
@@ -1246,6 +1513,7 @@ try {
             }
             echo json_encode($groupesParType);
         ?>;
+        const { jsPDF } = window.jspdf;
 
         // Éléments DOM
         const selectionForm = document.getElementById('selectionForm');
@@ -1256,55 +1524,132 @@ try {
         const avecIdentifiantsTableBody = document.querySelector('#avecIdentifiantsTable tbody');
         const genererIdentifiantsBtn = document.getElementById('genererIdentifiantsBtn');
         const selectAllSans = document.getElementById('selectAllSans');
-        const alertMessage = document.getElementById('alertMessage');
+        const selectAllAvec = document.getElementById('selectAllAvec');
+        
+        const sidebarToggle = document.getElementById('sidebarToggle');
+        const sidebar = document.getElementById('sidebar');
+        const mobileMenuOverlay = document.getElementById('mobileMenuOverlay');
+        const mainContent = document.getElementById('mainContent');
 
-        // Gestion du changement de type pour filtrer les groupes
-        filterType.addEventListener('change', function() {
-            const selectedType = this.value;
-            
-            // Réinitialiser la liste des groupes
-            filterGroupe.innerHTML = '<option value="">Sélectionner un groupe</option>';
-            filterGroupe.disabled = !selectedType;
-            
-            // Cacher la liste des utilisateurs sans identifiants
-            sansIdentifiantsCard.style.display = 'none';
-            selectedUsers.clear();
-            updateGenerateButton();
-            
-            if (selectedType && groupesParType[selectedType]) {
-                groupesParType[selectedType].forEach(groupe => {
-                    const option = document.createElement('option');
-                    option.value = groupe.id_GU;
-                    option.textContent = groupe.lib_GU;
-                    filterGroupe.appendChild(option);
-                });
-                filterGroupe.disabled = false;
+        const searchBarSansIdentifiants = document.getElementById('searchBarSansIdentifiants');
+        const searchInputSans = document.getElementById('searchInputSans');
+        const searchButtonSans = document.getElementById('searchButtonSans');
+        const exportPdfSansBtn = document.getElementById('exportPdfSansBtn');
+        const exportExcelSansBtn = document.getElementById('exportExcelSansBtn');
+        const exportCsvSansBtn = document.getElementById('exportCsvSansBtn');
+        const filterButtonSans = document.getElementById('filterButtonSans');
+        const filterDropdownSans = document.getElementById('filterDropdownSans');
+        const filterOptionsSans = document.querySelectorAll('#filterDropdownSans .filter-option');
+
+        const searchBarAvecIdentifiants = document.getElementById('searchBarAvecIdentifiants');
+        const searchInputAvec = document.getElementById('searchInputAvec');
+        const searchButtonAvec = document.getElementById('searchButtonAvec');
+        const exportPdfAvecBtn = document.getElementById('exportPdfAvecBtn');
+        const exportExcelAvecBtn = document.getElementById('exportExcelAvecBtn');
+        const exportCsvAvecBtn = document.getElementById('exportCsvAvecBtn');
+        const filterButtonAvec = document.getElementById('filterButtonAvec');
+        const filterDropdownAvec = document.getElementById('filterDropdownAvec');
+        const filterOptionsAvec = document.querySelectorAll('#filterDropdownAvec .filter-option');
+
+        const modifierAvecIdentBtn = document.getElementById('modifierAvecIdentBtn');
+        const supprimerAvecIdentBtn = document.getElementById('supprimerAvecIdentBtn');
+        const rafraichirAvecIdentBtn = document.getElementById('rafraichirAvecIdentBtn');
+
+        const messageModal = document.getElementById('messageModal');
+        const messageTitle = document.getElementById('messageTitle');
+        const messageText = document.getElementById('messageText');
+        const messageIcon = document.getElementById('messageIcon');
+        const messageButton = document.getElementById('messageButton');
+        const messageClose = document.getElementById('messageClose');
+
+        // Function to show messages in a modal
+        function showAlert(message, type = 'success', title = null) {
+            if (!title) {
+                switch (type) {
+                    case 'success':
+                        title = 'Succès';
+                        break;
+                    case 'error':
+                        title = 'Erreur';
+                        break;
+                    case 'warning':
+                        title = 'Attention';
+                        break;
+                    case 'info':
+                        title = 'Information';
+                        break;
+                    default:
+                        title = 'Message';
+                }
+            }
+
+            messageIcon.className = 'message-icon';
+            switch (type) {
+                case 'success':
+                    messageIcon.classList.add('success');
+                    messageIcon.innerHTML = '<i class="fas fa-check-circle"></i>';
+                    break;
+                case 'error':
+                    messageIcon.classList.add('error');
+                    messageIcon.innerHTML = '<i class="fas fa-exclamation-circle"></i>';
+                    break;
+                case 'warning':
+                    messageIcon.classList.add('warning');
+                    messageIcon.innerHTML = '<i class="fas fa-exclamation-triangle"></i>';
+                    break;
+                case 'info':
+                    messageIcon.classList.add('info');
+                    messageIcon.innerHTML = '<i class="fas fa-info-circle"></i>';
+                    break;
+                default:
+                    messageIcon.innerHTML = '<i class="fas fa-bell"></i>';
+            }
+
+            messageTitle.textContent = title;
+            messageText.textContent = message;
+            messageModal.style.display = 'flex';
+        }
+
+        // Close the modal
+        function closeMessageModal() {
+            messageModal.style.display = 'none';
+        }
+
+        // Events for the modal
+        messageButton.addEventListener('click', closeMessageModal);
+        messageClose.addEventListener('click', closeMessageModal);
+        messageModal.addEventListener('click', function(e) {
+            if (e.target === messageModal) {
+                closeMessageModal();
             }
         });
 
-        // Gestion du toggle sidebar
-        const sidebarToggle = document.getElementById('sidebarToggle');
-        const sidebar = document.getElementById('sidebar');
-        const mainContent = document.getElementById('mainContent');
+        // Toggle sidebar for mobile
+        function toggleSidebar() {
+            sidebar.classList.toggle('mobile-open');
+            mobileMenuOverlay.classList.toggle('active');
+            
+            const barsIcon = sidebarToggle.querySelector('.fa-bars');
+            const timesIcon = sidebarToggle.querySelector('.fa-times');
+            
+            if (sidebar.classList.contains('mobile-open')) {
+                barsIcon.style.display = 'none';
+                timesIcon.style.display = 'inline-block';
+            } else {
+                barsIcon.style.display = 'inline-block';
+                timesIcon.style.display = 'none';
+            }
+        }
 
         if (sidebarToggle) {
-            sidebarToggle.addEventListener('click', function() {
-                sidebar.classList.toggle('collapsed');
-                mainContent.classList.toggle('sidebar-collapsed');
-            });
+            sidebarToggle.addEventListener('click', toggleSidebar);
         }
 
-        // Fonction pour afficher les messages
-        function showAlert(message, type = 'success') {
-            alertMessage.textContent = message;
-            alertMessage.className = `alert ${type}`;
-            alertMessage.style.display = 'block';
-            setTimeout(() => {
-                alertMessage.style.display = 'none';
-            }, 5000);
+        if (mobileMenuOverlay) {
+            mobileMenuOverlay.addEventListener('click', toggleSidebar);
         }
 
-        // Fonction pour faire une requête AJAX
+        // AJAX Request Function
         async function makeAjaxRequest(data) {
             try {
                 const response = await fetch(window.location.href, {
@@ -1321,29 +1666,50 @@ try {
             }
         }
 
-        // Fonction pour mettre à jour l'état du bouton générer
+        // Update button state for users without credentials
         function updateGenerateButton() {
-            genererIdentifiantsBtn.disabled = selectedUsers.size === 0;
+            genererIdentifiantsBtn.disabled = selectedUsersSans.size === 0;
         }
 
-        // Fonction pour mettre à jour l'état des boutons pour les utilisateurs avec identifiants
+        // Update button state for users with credentials
         function updateActionButtonsAvecIdent() {
-            const modifierBtn = document.getElementById('modifierAvecIdentBtn');
-            const supprimerBtn = document.getElementById('supprimerAvecIdentBtn');
-            
-            if (selectedUsersWithCredentials.size === 1) {
-                modifierBtn.disabled = false;
-                supprimerBtn.disabled = false;
-            } else if (selectedUsersWithCredentials.size > 1) {
-                modifierBtn.disabled = true;
-                supprimerBtn.disabled = false;
+            if (selectedUsersAvec.size === 1) {
+                modifierAvecIdentBtn.disabled = false;
+                supprimerAvecIdentBtn.disabled = false;
+            } else if (selectedUsersAvec.size > 1) {
+                modifierAvecIdentBtn.disabled = true;
+                supprimerAvecIdentBtn.disabled = false;
             } else {
-                modifierBtn.disabled = true;
-                supprimerBtn.disabled = true;
+                modifierAvecIdentBtn.disabled = true;
+                supprimerAvecIdentBtn.disabled = true;
             }
         }
 
-        // Soumission du formulaire de sélection
+        // Handle type change to filter groups
+        filterType.addEventListener('change', function() {
+            const selectedType = this.value;
+            
+            filterGroupe.innerHTML = '<option value="">Sélectionner un groupe</option>';
+            filterGroupe.disabled = !selectedType;
+            
+            sansIdentifiantsCard.style.display = 'none';
+            searchBarSansIdentifiants.style.display = 'none';
+            sansIdentifiantsTableBody.innerHTML = ''; // Clear table content
+            selectedUsersSans.clear();
+            updateGenerateButton();
+            
+            if (selectedType && groupesParType[selectedType]) {
+                groupesParType[selectedType].forEach(groupe => {
+                    const option = document.createElement('option');
+                    option.value = groupe.id_GU;
+                    option.textContent = groupe.lib_GU;
+                    filterGroupe.appendChild(option);
+                });
+                filterGroupe.disabled = false;
+            }
+        });
+
+        // Submit selection form
         selectionForm.addEventListener('submit', async function(e) {
             e.preventDefault();
 
@@ -1367,6 +1733,7 @@ try {
                 if (result.success) {
                     updateSansIdentifiantsTable(result.data);
                     sansIdentifiantsCard.style.display = 'block';
+                    searchBarSansIdentifiants.style.display = 'flex'; // Show search bar
                 } else {
                     showAlert(result.message, 'error');
                 }
@@ -1375,10 +1742,10 @@ try {
             }
         });
 
-        // Fonction pour mettre à jour le tableau des utilisateurs sans identifiants
+        // Update users without credentials table
         function updateSansIdentifiantsTable(users) {
             sansIdentifiantsTableBody.innerHTML = '';
-            selectedUsers.clear();
+            selectedUsersSans.clear();
 
             if (users.length === 0) {
                 sansIdentifiantsTableBody.innerHTML = `
@@ -1392,10 +1759,12 @@ try {
             } else {
                 users.forEach(user => {
                     const row = sansIdentifiantsTableBody.insertRow();
+                    row.setAttribute('data-id-original', user.id_original);
+                    row.setAttribute('data-type-table', user.type_table);
                     row.innerHTML = `
                         <td>
                             <label class="checkbox-container">
-                                <input type="checkbox" value="${user.id_original}-${user.type_table}" data-user='${JSON.stringify(user)}'>
+                                <input type="checkbox" class="sans-ident-checkbox" value="${user.id_original}-${user.type_table}" data-user='${JSON.stringify(user)}'>
                                 <span class="checkmark"></span>
                             </label>
                         </td>
@@ -1406,119 +1775,43 @@ try {
                         <td>${user.lib_GU || 'N/A'}</td>
                     `;
 
-                    const checkbox = row.querySelector('input[type="checkbox"]');
+                    const checkbox = row.querySelector('.sans-ident-checkbox');
                     checkbox.addEventListener('change', function() {
                         if (this.checked) {
-                            selectedUsers.add(this.value);
+                            selectedUsersSans.add(this.value);
                         } else {
-                            selectedUsers.delete(this.value);
+                            selectedUsersSans.delete(this.value);
                         }
                         updateGenerateButton();
-                        updateSelectAllCheckbox();
+                        updateSelectAllSansCheckbox();
                     });
                 });
             }
 
             updateGenerateButton();
             selectAllSans.checked = false;
+            updateSelectAllSansCheckbox();
         }
 
-        // Gestion du "sélectionner tout" pour les utilisateurs sans identifiants
+        // Handle "select all" for users without credentials
         selectAllSans.addEventListener('change', function() {
-            const checkboxes = sansIdentifiantsTableBody.querySelectorAll('input[type="checkbox"]');
-            selectedUsers.clear();
+            const checkboxes = sansIdentifiantsTableBody.querySelectorAll('.sans-ident-checkbox');
+            selectedUsersSans.clear();
 
             checkboxes.forEach(checkbox => {
                 checkbox.checked = this.checked;
                 if (this.checked) {
-                    selectedUsers.add(checkbox.value);
+                    selectedUsersSans.add(checkbox.value);
                 }
             });
 
             updateGenerateButton();
         });
 
-        // Gestion du "sélectionner tout" pour les utilisateurs avec identifiants
-        const selectAllAvec = document.getElementById('selectAllAvec');
-        if (selectAllAvec) {
-            selectAllAvec.addEventListener('change', function() {
-                const checkboxes = avecIdentifiantsTableBody.querySelectorAll('.user-checkbox');
-                selectedUsersWithCredentials.clear();
-
-                checkboxes.forEach(checkbox => {
-                    checkbox.checked = this.checked;
-                    if (this.checked) {
-                        selectedUsersWithCredentials.add(checkbox.value);
-                    }
-                });
-
-                updateActionButtonsAvecIdent();
-            });
-        }
-
-        // Fonction pour mettre à jour le checkbox "sélectionner tout" des utilisateurs avec identifiants
-        function updateSelectAllAvecCheckbox() {
-            const selectAllAvec = document.getElementById('selectAllAvec');
-            if (!selectAllAvec) return;
-            
-            const checkboxes = avecIdentifiantsTableBody.querySelectorAll('.user-checkbox');
-            const checkedBoxes = avecIdentifiantsTableBody.querySelectorAll('.user-checkbox:checked');
-            
-            if (checkboxes.length === 0) {
-                selectAllAvec.indeterminate = false;
-                selectAllAvec.checked = false;
-            } else if (checkedBoxes.length === checkboxes.length) {
-                selectAllAvec.indeterminate = false;
-                selectAllAvec.checked = true;
-            } else if (checkedBoxes.length > 0) {
-                selectAllAvec.indeterminate = true;
-                selectAllAvec.checked = false;
-            } else {
-                selectAllAvec.indeterminate = false;
-                selectAllAvec.checked = false;
-            }
-        }
-
-        // Fonction pour modifier un utilisateur avec identifiant
-        function modifierUtilisateurAvecIdent(idUtil) {
-            const row = document.querySelector(`tr[data-id="${idUtil}"]`);
-            if (row) {
-                const currentLogin = row.cells[4].textContent.trim();
-                
-                const newLogin = prompt(`Modifier le login pour cet utilisateur:\n\nLogin actuel: ${currentLogin}`, currentLogin);
-                if (newLogin && newLogin !== currentLogin) {
-                    const newPassword = prompt('Nouveau mot de passe (laisser vide pour garder l\'actuel):');
-                    
-                    modifierCredentials(idUtil, newLogin, newPassword);
-                }
-            }
-        }
-
-        // Fonction pour modifier les identifiants
-        async function modifierCredentials(idUtil, newLogin, newPassword = '') {
-            try {
-                const result = await makeAjaxRequest({
-                    action: 'update_credentials',
-                    id_util: idUtil,
-                    new_login: newLogin,
-                    new_password: newPassword
-                });
-
-                if (result.success) {
-                    showAlert(result.message);
-                    loadUsersWithCredentials();
-                } else {
-                    showAlert(result.message, 'error');
-                }
-            } catch (error) {
-                showAlert('Erreur lors de la modification', 'error');
-            }
-        }
-
-        // Fonction pour mettre à jour le checkbox "sélectionner tout"
-        function updateSelectAllCheckbox() {
-            const checkboxes = sansIdentifiantsTableBody.querySelectorAll('input[type="checkbox"]');
-            const checkedBoxes = sansIdentifiantsTableBody.querySelectorAll('input[type="checkbox"]:checked');
+        // Update "select all" checkbox for users without credentials
+        function updateSelectAllSansCheckbox() {
+            const checkboxes = sansIdentifiantsTableBody.querySelectorAll('.sans-ident-checkbox');
+            const checkedBoxes = sansIdentifiantsTableBody.querySelectorAll('.sans-ident-checkbox:checked');
             
             if (checkboxes.length === 0) {
                 selectAllSans.indeterminate = false;
@@ -1535,13 +1828,56 @@ try {
             }
         }
 
-        // Génération des identifiants
+        // Handle "select all" for users with credentials
+        if (selectAllAvec) {
+            selectAllAvec.addEventListener('change', function() {
+                const checkboxes = avecIdentifiantsTableBody.querySelectorAll('.avec-ident-checkbox');
+                selectedUsersAvec.clear();
+
+                checkboxes.forEach(checkbox => {
+                    checkbox.checked = this.checked;
+                    if (this.checked) {
+                        selectedUsersAvec.add(checkbox.value);
+                    }
+                });
+
+                updateActionButtonsAvecIdent();
+            });
+        }
+
+        // Update "select all" checkbox for users with credentials
+        function updateSelectAllAvecCheckbox() {
+            const selectAllAvec = document.getElementById('selectAllAvec');
+            if (!selectAllAvec) return;
+            
+            const checkboxes = avecIdentifiantsTableBody.querySelectorAll('.avec-ident-checkbox');
+            const checkedBoxes = avecIdentifiantsTableBody.querySelectorAll('.avec-ident-checkbox:checked');
+            
+            if (checkboxes.length === 0) {
+                selectAllAvec.indeterminate = false;
+                selectAllAvec.checked = false;
+            } else if (checkedBoxes.length === checkboxes.length) {
+                selectAllAvec.indeterminate = false;
+                selectAllAvec.checked = true;
+            } else if (checkedBoxes.length > 0) {
+                selectAllAvec.indeterminate = true;
+                selectAllAvec.checked = false;
+            } else {
+                selectAllAvec.indeterminate = false;
+                selectAllAvec.checked = false;
+            }
+        }
+
+        // Generate credentials
         genererIdentifiantsBtn.addEventListener('click', async function() {
-            if (selectedUsers.size === 0) return;
+            if (selectedUsersSans.size === 0) {
+                showAlert('Veuillez sélectionner au moins un utilisateur pour générer des identifiants.', 'warning');
+                return;
+            }
 
             const selectedUsersData = [];
-            selectedUsers.forEach(value => {
-                const checkbox = document.querySelector(`input[value="${value}"]`);
+            selectedUsersSans.forEach(value => {
+                const checkbox = sansIdentifiantsTableBody.querySelector(`input[value="${value}"]`);
                 if (checkbox) {
                     selectedUsersData.push(JSON.parse(checkbox.dataset.user));
                 }
@@ -1558,18 +1894,17 @@ try {
                 });
 
                 if (result.success) {
-                    showAlert(result.message);
+                    showAlert(result.message, 'success');
                     
-                    // Afficher les identifiants générés
                     if (result.data && result.data.length > 0) {
                         let credentialsMessage = "Identifiants générés :\n\n";
                         result.data.forEach(user => {
-                            credentialsMessage += `${user.prenom} ${user.nom} - Login: ${user.login}, Mot de passe: ${user.password}\n`;
+                            credentialsMessage += `Nom: ${user.nom} ${user.prenom}\nLogin: ${user.login}\nMot de passe: ${user.password}\n\n`;
                         });
-                        alert(credentialsMessage);
+                        alert(credentialsMessage); // Consider using a custom modal for this instead of native alert
                     }
                     
-                    // Rafraîchir la liste
+                    // Refresh both tables
                     selectionForm.dispatchEvent(new Event('submit'));
                     loadUsersWithCredentials();
                 } else {
@@ -1583,7 +1918,7 @@ try {
             }
         });
 
-        // Fonction pour charger les utilisateurs avec identifiants
+        // Load users with credentials
         async function loadUsersWithCredentials() {
             try {
                 const result = await makeAjaxRequest({
@@ -1592,16 +1927,18 @@ try {
 
                 if (result.success) {
                     updateAvecIdentifiantsTable(result.data);
+                } else {
+                    showAlert(result.message, 'error');
                 }
             } catch (error) {
-                console.error('Erreur lors du chargement des utilisateurs avec identifiants');
+                showAlert('Erreur lors du chargement des utilisateurs avec identifiants', 'error');
             }
         }
 
-        // Fonction pour mettre à jour le tableau des utilisateurs avec identifiants
+        // Update users with credentials table
         function updateAvecIdentifiantsTable(users) {
             avecIdentifiantsTableBody.innerHTML = '';
-            selectedUsersWithCredentials.clear();
+            selectedUsersAvec.clear();
 
             if (users.length === 0) {
                 avecIdentifiantsTableBody.innerHTML = `
@@ -1619,7 +1956,7 @@ try {
                     row.innerHTML = `
                         <td>
                             <label class="checkbox-container">
-                                <input type="checkbox" value="${user.id_util}" class="user-checkbox">
+                                <input type="checkbox" value="${user.id_util}" class="avec-ident-checkbox">
                                 <span class="checkmark"></span>
                             </label>
                         </td>
@@ -1635,19 +1972,21 @@ try {
                                 <button class="action-button edit" title="Modifier" onclick="modifierUtilisateurAvecIdent('${user.id_util}')">
                                     <i class="fas fa-pencil-alt"></i>
                                 </button>
+                                <button class="action-button delete" title="Supprimer" onclick="supprimerUtilisateurAvecIdent('${user.id_util}')">
+                                    <i class="fas fa-trash"></i>
+                                </button>
                             </div>
                         </td>
                     `;
                 });
                 
-                // Attacher les événements aux checkboxes après création
-                const checkboxes = avecIdentifiantsTableBody.querySelectorAll('.user-checkbox');
+                const checkboxes = avecIdentifiantsTableBody.querySelectorAll('.avec-ident-checkbox');
                 checkboxes.forEach(checkbox => {
                     checkbox.addEventListener('change', function() {
                         if (this.checked) {
-                            selectedUsersWithCredentials.add(this.value);
+                            selectedUsersAvec.add(this.value);
                         } else {
-                            selectedUsersWithCredentials.delete(this.value);
+                            selectedUsersAvec.delete(this.value);
                         }
                         updateActionButtonsAvecIdent();
                         updateSelectAllAvecCheckbox();
@@ -1656,21 +1995,91 @@ try {
             }
             
             updateActionButtonsAvecIdent();
-            const selectAllAvec = document.getElementById('selectAllAvec');
-            if (selectAllAvec) selectAllAvec.checked = false;
+            selectAllAvec.checked = false;
+            updateSelectAllAvecCheckbox();
         }
 
-        // Boutons pour les utilisateurs avec identifiants
-        document.getElementById('modifierAvecIdentBtn').addEventListener('click', function() {
-            if (selectedUsersWithCredentials.size === 1) {
-                const idUtil = Array.from(selectedUsersWithCredentials)[0];
+        // Modify user with credentials (single action button)
+        function modifierUtilisateurAvecIdent(idUtil) {
+            const row = document.querySelector(`tr[data-id="${idUtil}"]`);
+            if (row) {
+                const currentLogin = row.cells[4].textContent.trim();
+                
+                const newLogin = prompt(`Modifier le login pour cet utilisateur:\n\nLogin actuel: ${currentLogin}`, currentLogin);
+                if (newLogin !== null) { // User clicked OK or entered something
+                    if (newLogin === "") {
+                        showAlert('Le login ne peut pas être vide.', 'warning');
+                        return;
+                    }
+                    const newPassword = prompt('Nouveau mot de passe (laisser vide pour garder l\'actuel):');
+                    
+                    modifierCredentials(idUtil, newLogin, newPassword);
+                }
+            }
+        }
+
+        // Modify credentials AJAX call
+        async function modifierCredentials(idUtil, newLogin, newPassword = '') {
+            try {
+                const result = await makeAjaxRequest({
+                    action: 'update_credentials',
+                    id_util: idUtil,
+                    new_login: newLogin,
+                    new_password: newPassword
+                });
+
+                if (result.success) {
+                    showAlert(result.message);
+                    loadUsersWithCredentials(); // Reload table after update
+                } else {
+                    showAlert(result.message, 'error');
+                }
+            } catch (error) {
+                showAlert('Erreur lors de la modification', 'error');
+            }
+        }
+
+        // Delete user with credentials (single action button)
+        async function supprimerUtilisateurAvecIdent(idUtil) {
+            const row = document.querySelector(`tr[data-id="${idUtil}"]`);
+            if (row) {
+                const nom = row.cells[1].textContent;
+                const prenom = row.cells[2].textContent;
+                
+                if (confirm(`Êtes-vous sûr de vouloir supprimer les identifiants de ${prenom} ${nom} ?\n\nCela supprimera leur login et mot de passe et ils ne pourront plus se connecter.`)) {
+                    try {
+                        const result = await makeAjaxRequest({
+                            action: 'delete_credentials',
+                            ids_utilisateurs: JSON.stringify([idUtil])
+                        });
+
+                        if (result.success) {
+                            showAlert(result.message);
+                            loadUsersWithCredentials();
+                            selectedUsersAvec.delete(idUtil);
+                            updateActionButtonsAvecIdent();
+                        } else {
+                            showAlert(result.message, 'error');
+                        }
+                    } catch (error) {
+                        showAlert('Erreur lors de la suppression', 'error');
+                    }
+                }
+            }
+        }
+
+        // Global modify button for users with credentials
+        modifierAvecIdentBtn.addEventListener('click', function() {
+            if (selectedUsersAvec.size === 1) {
+                const idUtil = Array.from(selectedUsersAvec)[0];
                 modifierUtilisateurAvecIdent(idUtil);
             }
         });
 
-        document.getElementById('supprimerAvecIdentBtn').addEventListener('click', async function() {
-            if (selectedUsersWithCredentials.size > 0) {
-                const idsArray = Array.from(selectedUsersWithCredentials);
+        // Global delete button for users with credentials
+        supprimerAvecIdentBtn.addEventListener('click', async function() {
+            if (selectedUsersAvec.size > 0) {
+                const idsArray = Array.from(selectedUsersAvec);
                 
                 if (confirm(`Êtes-vous sûr de vouloir supprimer les identifiants de ${idsArray.length} utilisateur(s) sélectionné(s) ?\n\nCela supprimera leur login et mot de passe définitivement.`)) {
                     try {
@@ -1685,7 +2094,7 @@ try {
                         if (result.success) {
                             showAlert(result.message);
                             loadUsersWithCredentials();
-                            selectedUsersWithCredentials.clear();
+                            selectedUsersAvec.clear();
                             updateActionButtonsAvecIdent();
                         } else {
                             showAlert(result.message, 'error');
@@ -1700,11 +2109,254 @@ try {
             }
         });
 
-        // Bouton rafraîchir
-        document.getElementById('rafraichirAvecIdentBtn').addEventListener('click', loadUsersWithCredentials);
+        // Refresh button for users with credentials
+        rafraichirAvecIdentBtn.addEventListener('click', loadUsersWithCredentials);
 
-        // Export Excel - Sans identifiants
-        document.getElementById('exporterSansIdentBtn').addEventListener('click', function() {
+        // Search functionality for "sans identifiants" table
+        searchButtonSans.addEventListener('click', searchUsersSans);
+        searchInputSans.addEventListener('keyup', function(e) {
+            if (e.key === 'Enter') {
+                searchUsersSans();
+            }
+        });
+
+        function searchUsersSans() {
+            const searchTerm = searchInputSans.value.toLowerCase();
+            const rows = sansIdentifiantsTableBody.querySelectorAll('tr');
+            
+            rows.forEach(row => {
+                if (row.querySelector('td[colspan="6"]')) return; // Ignore empty message
+                
+                const nom = row.cells[1].textContent.toLowerCase();
+                const prenom = row.cells[2].textContent.toLowerCase();
+                const email = row.cells[3].textContent.toLowerCase();
+                const type = row.cells[4].textContent.toLowerCase();
+                const groupe = row.cells[5].textContent.toLowerCase();
+                
+                if (nom.includes(searchTerm) || prenom.includes(searchTerm) || email.includes(searchTerm) || type.includes(searchTerm) || groupe.includes(searchTerm)) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        }
+
+        // Filter functionality for "sans identifiants" table
+        filterButtonSans.addEventListener('click', function() {
+            filterDropdownSans.classList.toggle('show');
+        });
+
+        filterOptionsSans.forEach(option => {
+            option.addEventListener('click', function() {
+                const filterType = this.getAttribute('data-filter');
+                applyFilterSans(filterType);
+                filterDropdownSans.classList.remove('show');
+            });
+        });
+
+        function applyFilterSans(filterType) {
+            const rows = Array.from(sansIdentifiantsTableBody.querySelectorAll('tr'));
+            
+            const emptyRow = sansIdentifiantsTableBody.querySelector('td[colspan="6"]');
+            if (emptyRow) {
+                emptyRow.closest('tr').remove();
+            }
+            
+            rows.forEach(row => {
+                if (!row.querySelector('td[colspan="6"]')) {
+                    row.style.display = '';
+                }
+            });
+            
+            rows.sort((a, b) => {
+                if (a.querySelector('td[colspan="6"]') || b.querySelector('td[colspan="6"]')) return 0;
+                
+                const nomA = a.cells[1].textContent.toLowerCase();
+                const nomB = b.cells[1].textContent.toLowerCase();
+                const typeA = a.cells[4].textContent.toLowerCase();
+                const typeB = b.cells[4].textContent.toLowerCase();
+                
+                switch (filterType) {
+                    case 'name-asc':
+                        return nomA.localeCompare(nomB);
+                    case 'name-desc':
+                        return nomB.localeCompare(nomA);
+                    case 'type-asc':
+                        return typeA.localeCompare(typeB);
+                    default:
+                        return 0;
+                }
+            });
+            
+            rows.forEach(row => {
+                sansIdentifiantsTableBody.appendChild(row);
+            });
+            
+            if (rows.length === 0 || (rows.length === 1 && rows[0].querySelector('td[colspan="6"]'))) {
+                sansIdentifiantsTableBody.innerHTML = `
+                    <tr>
+                        <td colspan="6" style="text-align: center; color: var(--gray-500); padding: var(--space-8);">
+                            <i class="fas fa-users" style="font-size: 2rem; margin-bottom: var(--space-2);"></i><br>
+                            Aucun utilisateur sans identifiant trouvé pour cette sélection.
+                        </td>
+                    </tr>
+                `;
+            }
+        }
+
+        // Search functionality for "avec identifiants" table
+        searchButtonAvec.addEventListener('click', searchUsersAvec);
+        searchInputAvec.addEventListener('keyup', function(e) {
+            if (e.key === 'Enter') {
+                searchUsersAvec();
+            }
+        });
+
+        function searchUsersAvec() {
+            const searchTerm = searchInputAvec.value.toLowerCase();
+            const rows = avecIdentifiantsTableBody.querySelectorAll('tr');
+            
+            rows.forEach(row => {
+                if (row.querySelector('td[colspan="9"]')) return; // Ignore empty message
+                
+                const nom = row.cells[1].textContent.toLowerCase();
+                const prenom = row.cells[2].textContent.toLowerCase();
+                const email = row.cells[3].textContent.toLowerCase();
+                const login = row.cells[4].textContent.toLowerCase();
+                const groupe = row.cells[6].textContent.toLowerCase();
+                const type = row.cells[7].textContent.toLowerCase();
+                
+                if (nom.includes(searchTerm) || prenom.includes(searchTerm) || email.includes(searchTerm) || login.includes(searchTerm) || groupe.includes(searchTerm) || type.includes(searchTerm)) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        }
+
+        // Filter functionality for "avec identifiants" table
+        filterButtonAvec.addEventListener('click', function() {
+            filterDropdownAvec.classList.toggle('show');
+        });
+
+        filterOptionsAvec.forEach(option => {
+            option.addEventListener('click', function() {
+                const filterType = this.getAttribute('data-filter');
+                applyFilterAvec(filterType);
+                filterDropdownAvec.classList.remove('show');
+            });
+        });
+
+        function applyFilterAvec(filterType) {
+            const rows = Array.from(avecIdentifiantsTableBody.querySelectorAll('tr'));
+            
+            const emptyRow = avecIdentifiantsTableBody.querySelector('td[colspan="9"]');
+            if (emptyRow) {
+                emptyRow.closest('tr').remove();
+            }
+            
+            rows.forEach(row => {
+                if (!row.querySelector('td[colspan="9"]')) {
+                    row.style.display = '';
+                }
+            });
+            
+            rows.sort((a, b) => {
+                if (a.querySelector('td[colspan="9"]') || b.querySelector('td[colspan="9"]')) return 0;
+                
+                const idA = parseInt(a.getAttribute('data-id'));
+                const idB = parseInt(b.getAttribute('data-id'));
+                const nomA = a.cells[1].textContent.toLowerCase();
+                const nomB = b.cells[1].textContent.toLowerCase();
+                const typeA = a.cells[7].textContent.toLowerCase();
+                const typeB = b.cells[7].textContent.toLowerCase();
+                const groupA = a.cells[6].textContent.toLowerCase();
+                const groupB = b.cells[6].textContent.toLowerCase();
+                
+                switch (filterType) {
+                    case 'id-asc':
+                        return idA - idB;
+                    case 'id-desc':
+                        return idB - idA;
+                    case 'name-asc':
+                        return nomA.localeCompare(nomB);
+                    case 'name-desc':
+                        return nomB.localeCompare(nomA);
+                    case 'type-asc':
+                        return typeA.localeCompare(typeB);
+                    case 'group-asc':
+                        return groupA.localeCompare(groupB);
+                    default:
+                        return 0;
+                }
+            });
+            
+            rows.forEach(row => {
+                avecIdentifiantsTableBody.appendChild(row);
+            });
+            
+            if (rows.length === 0 || (rows.length === 1 && rows[0].querySelector('td[colspan="9"]'))) {
+                avecIdentifiantsTableBody.innerHTML = `
+                    <tr>
+                        <td colspan="9" style="text-align: center; color: var(--gray-500); padding: var(--space-8);">
+                            <i class="fas fa-key" style="font-size: 2rem; margin-bottom: var(--space-2);"></i><br>
+                            Aucun utilisateur avec identifiants généré.
+                        </td>
+                    </tr>
+                `;
+            }
+        }
+
+        // Close dropdown if clicked outside
+        window.addEventListener('click', function(e) {
+            if (!e.target.matches('.filter-button') && !e.target.closest('.filter-dropdown')) {
+                filterDropdownSans.classList.remove('show');
+                filterDropdownAvec.classList.remove('show');
+            }
+        });
+
+        // Export to PDF for "sans identifiants"
+        exportPdfSansBtn.addEventListener('click', function() {
+            const doc = new jsPDF();
+            const title = "Utilisateurs sans Identifiants";
+            const date = new Date().toLocaleDateString();
+            
+            doc.setFontSize(18);
+            doc.text(title, 14, 20);
+            
+            doc.setFontSize(10);
+            doc.text(`Exporté le: ${date}`, 14, 30);
+            
+            const headers = [['Nom', 'Prénom', 'Email', 'Type', 'Groupe']];
+            const data = [];
+            
+            document.querySelectorAll('#sansIdentifiantsTable tbody tr').forEach(row => {
+                if (!row.querySelector('td[colspan="6"]')) {
+                    data.push([
+                        row.cells[1].textContent,
+                        row.cells[2].textContent,
+                        row.cells[3].textContent,
+                        row.cells[4].textContent,
+                        row.cells[5].textContent
+                    ]);
+                }
+            });
+            
+            doc.autoTable({
+                head: headers,
+                body: data,
+                startY: 40,
+                styles: { fontSize: 10, cellPadding: 3, valign: 'middle' },
+                headStyles: { fillColor: [59, 130, 246], textColor: 255, fontStyle: 'bold' },
+                alternateRowStyles: { fillColor: [241, 245, 249] }
+            });
+            
+            doc.save(`utilisateurs_sans_identifiants_${new Date().toISOString().split('T')[0]}.pdf`);
+            showAlert('Exportation PDF terminée');
+        });
+
+        // Export to Excel for "sans identifiants"
+        exportExcelSansBtn.addEventListener('click', function() {
             const rows = sansIdentifiantsTableBody.querySelectorAll('tr');
             if (rows.length === 1 && rows[0].querySelector('td[colspan="6"]')) {
                 showAlert('Aucune donnée à exporter', 'warning');
@@ -1715,13 +2367,12 @@ try {
             
             rows.forEach(row => {
                 if (!row.querySelector('td[colspan="6"]')) {
-                    const cells = row.querySelectorAll('td');
                     data.push([
-                        cells[1].textContent,
-                        cells[2].textContent,
-                        cells[3].textContent,
-                        cells[4].textContent,
-                        cells[5].textContent
+                        row.cells[1].textContent,
+                        row.cells[2].textContent,
+                        row.cells[3].textContent,
+                        row.cells[4].textContent,
+                        row.cells[5].textContent
                     ]);
                 }
             });
@@ -1735,8 +2386,75 @@ try {
             showAlert('Exportation Excel terminée');
         });
 
-        // Export Excel - Avec identifiants
-        document.getElementById('exporterAvecIdentBtn').addEventListener('click', function() {
+        // Export to CSV for "sans identifiants"
+        exportCsvSansBtn.addEventListener('click', function() {
+            let csv = "Nom,Prénom,Email,Type,Groupe\n";
+            
+            document.querySelectorAll('#sansIdentifiantsTable tbody tr').forEach(row => {
+                if (!row.querySelector('td[colspan="6"]')) {
+                    csv += `"${row.cells[1].textContent}","${row.cells[2].textContent}","${row.cells[3].textContent}","${row.cells[4].textContent}","${row.cells[5].textContent}"\n`;
+                }
+            });
+            
+            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            const url = URL.createObjectURL(blob);
+            
+            link.setAttribute('href', url);
+            link.setAttribute('download', `utilisateurs_sans_identifiants_${new Date().toISOString().split('T')[0]}.csv`);
+            link.style.visibility = 'hidden';
+            
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            
+            showAlert('Exportation CSV terminée');
+        });
+
+        // Export to PDF for "avec identifiants"
+        exportPdfAvecBtn.addEventListener('click', function() {
+            const doc = new jsPDF();
+            const title = "Utilisateurs avec Identifiants";
+            const date = new Date().toLocaleDateString();
+            
+            doc.setFontSize(18);
+            doc.text(title, 14, 20);
+            
+            doc.setFontSize(10);
+            doc.text(`Exporté le: ${date}`, 14, 30);
+            
+            const headers = [['Nom', 'Prénom', 'Email', 'Login', 'Mot de passe', 'Groupe', 'Type']];
+            const data = [];
+            
+            document.querySelectorAll('#avecIdentifiantsTable tbody tr').forEach(row => {
+                if (!row.querySelector('td[colspan="9"]')) {
+                    data.push([
+                        row.cells[1].textContent,
+                        row.cells[2].textContent,
+                        row.cells[3].textContent,
+                        row.cells[4].textContent,
+                        row.cells[5].textContent.replace(/•/g, ''), // Clean bullets
+                        row.cells[6].textContent,
+                        row.cells[7].textContent
+                    ]);
+                }
+            });
+            
+            doc.autoTable({
+                head: headers,
+                body: data,
+                startY: 40,
+                styles: { fontSize: 10, cellPadding: 3, valign: 'middle' },
+                headStyles: { fillColor: [59, 130, 246], textColor: 255, fontStyle: 'bold' },
+                alternateRowStyles: { fillColor: [241, 245, 249] }
+            });
+            
+            doc.save(`utilisateurs_avec_identifiants_${new Date().toISOString().split('T')[0]}.pdf`);
+            showAlert('Exportation PDF terminée');
+        });
+
+        // Export to Excel for "avec identifiants"
+        exportExcelAvecBtn.addEventListener('click', function() {
             const rows = avecIdentifiantsTableBody.querySelectorAll('tr');
             if (rows.length === 1 && rows[0].querySelector('td[colspan="9"]')) {
                 showAlert('Aucune donnée à exporter', 'warning');
@@ -1747,15 +2465,14 @@ try {
             
             rows.forEach(row => {
                 if (!row.querySelector('td[colspan="9"]')) {
-                    const cells = row.querySelectorAll('td');
                     data.push([
-                        cells[1].textContent,
-                        cells[2].textContent,
-                        cells[3].textContent,
-                        cells[4].textContent,
-                        cells[5].textContent.replace(/•/g, ''), // Nettoyer les bullets
-                        cells[6].textContent,
-                        cells[7].textContent
+                        row.cells[1].textContent,
+                        row.cells[2].textContent,
+                        row.cells[3].textContent,
+                        row.cells[4].textContent,
+                        row.cells[5].textContent.replace(/•/g, ''), // Clean bullets
+                        row.cells[6].textContent,
+                        row.cells[7].textContent
                     ]);
                 }
             });
@@ -1769,27 +2486,64 @@ try {
             showAlert('Exportation Excel terminée');
         });
 
-        // Charger les utilisateurs avec identifiants au démarrage
-        document.addEventListener('DOMContentLoaded', function() {
-            loadUsersWithCredentials();
-            updateActionButtonsAvecIdent(); // Initialiser les boutons disabled
+        // Export to CSV for "avec identifiants"
+        exportCsvAvecBtn.addEventListener('click', function() {
+            let csv = "Nom,Prénom,Email,Login,Mot de passe,Groupe,Type\n";
+            
+            document.querySelectorAll('#avecIdentifiantsTable tbody tr').forEach(row => {
+                if (!row.querySelector('td[colspan="9"]')) {
+                    csv += `"${row.cells[1].textContent}","${row.cells[2].textContent}","${row.cells[3].textContent}","${row.cells[4].textContent}","${row.cells[5].textContent.replace(/•/g, '')}","${row.cells[6].textContent}","${row.cells[7].textContent}"\n`;
+                }
+            });
+            
+            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            const url = URL.createObjectURL(blob);
+            
+            link.setAttribute('href', url);
+            link.setAttribute('download', `utilisateurs_avec_identifiants_${new Date().toISOString().split('T')[0]}.csv`);
+            link.style.visibility = 'hidden';
+            
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            
+            showAlert('Exportation CSV terminée');
         });
 
-        // Responsive: Gestion mobile
-        function handleResize() {
-            if (window.innerWidth <= 768) {
-                if (sidebar) sidebar.classList.add('mobile');
-            } else {
-                if (sidebar) {
-                    sidebar.classList.remove('mobile');
-                    sidebar.classList.remove('collapsed');
+
+        // Initial load
+        document.addEventListener('DOMContentLoaded', function() {
+            loadUsersWithCredentials();
+            updateActionButtonsAvecIdent();
+            
+            // Hide action text on small screens
+            function handleResponsiveActions() {
+                const actionTexts = document.querySelectorAll('.action-text');
+                if (window.innerWidth < 768) {
+                    actionTexts.forEach(text => {
+                        text.style.display = 'none';
+                    });
+                } else {
+                    actionTexts.forEach(text => {
+                        text.style.display = 'inline';
+                    });
                 }
-                if (mainContent) mainContent.classList.remove('sidebar-collapsed');
+            }
+            
+            handleResponsiveActions();
+            window.addEventListener('resize', handleResponsiveActions);
+        });
+
+        // Responsive handling
+        function handleResize() {
+            if (window.innerWidth >= 1024) {
+                sidebar.classList.remove('mobile-open');
+                mobileMenuOverlay.classList.remove('active');
             }
         }
 
         window.addEventListener('resize', handleResize);
-        handleResize();
     </script>
 </body>
 </html>
