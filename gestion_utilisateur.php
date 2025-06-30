@@ -44,12 +44,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         pa.telephone as telephone,
                         pa.fk_id_util,
                         u.login_util,
-                        ? as lib_GU,
-                        ? as lib_type
+                        gu.lib_GU,
+                        tu.lib_type
                     FROM personnel_admin pa
                     LEFT JOIN utilisateur u ON pa.fk_id_util = u.id_util
-                    LEFT JOIN posseder p ON pa.fk_id_util = p.fk_id_util AND p.fk_id_GU = ?
-                    WHERE p.fk_id_GU IS NOT NULL AND (u.login_util IS NULL OR u.id_util IS NULL)
+                    INNER JOIN posseder p ON pa.fk_id_util = p.fk_id_util
+                    INNER JOIN groupe_utilisateur gu ON p.fk_id_GU = gu.id_GU
+                    INNER JOIN type_groupe tg ON gu.id_GU = tg.id_GU
+                    INNER JOIN type_utilisateur tu ON tg.id_type = tu.id_type
+                    WHERE p.fk_id_GU = ? AND (pa.fk_id_util IS NULL OR u.login_util IS NULL) AND tg.id_type = ?
                     
                     UNION
                     
@@ -62,12 +65,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         '' as telephone,
                         e.fk_id_util,
                         u.login_util,
-                        ? as lib_GU,
-                        ? as lib_type
+                        gu.lib_GU,
+                        tu.lib_type
                     FROM enseignant e
                     LEFT JOIN utilisateur u ON e.fk_id_util = u.id_util
-                    LEFT JOIN posseder p ON e.fk_id_util = p.fk_id_util AND p.fk_id_GU = ?
-                    WHERE p.fk_id_GU IS NOT NULL AND (u.login_util IS NULL OR u.id_util IS NULL)
+                    INNER JOIN posseder p ON e.fk_id_util = p.fk_id_util
+                    INNER JOIN groupe_utilisateur gu ON p.fk_id_GU = gu.id_GU
+                    INNER JOIN type_groupe tg ON gu.id_GU = tg.id_GU
+                    INNER JOIN type_utilisateur tu ON tg.id_type = tu.id_type
+                    WHERE p.fk_id_GU = ? AND (e.fk_id_util IS NULL OR u.login_util IS NULL) AND tg.id_type = ?
                     
                     UNION
                     
@@ -80,27 +86,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         '' as telephone,
                         et.fk_id_util,
                         u.login_util,
-                        ? as lib_GU,
-                        ? as lib_type
+                        gu.lib_GU,
+                        tu.lib_type
                     FROM etudiant et
                     LEFT JOIN utilisateur u ON et.fk_id_util = u.id_util
-                    LEFT JOIN posseder p ON et.fk_id_util = p.fk_id_util AND p.fk_id_GU = ?
-                    WHERE p.fk_id_GU IS NOT NULL AND (u.login_util IS NULL OR u.id_util IS NULL)
+                    INNER JOIN posseder p ON et.fk_id_util = p.fk_id_util
+                    INNER JOIN groupe_utilisateur gu ON p.fk_id_GU = gu.id_GU
+                    INNER JOIN type_groupe tg ON gu.id_GU = tg.id_GU
+                    INNER JOIN type_utilisateur tu ON tg.id_type = tu.id_type
+                    WHERE p.fk_id_GU = ? AND (et.fk_id_util IS NULL OR u.login_util IS NULL) AND tg.id_type = ?
                     
                     ORDER BY nom, prenom
                 ";
                 
-                // Récupérer les libellés
-                $stmtGU = $pdo->prepare("SELECT lib_GU FROM groupe_utilisateur WHERE id_GU = ?");
-                $stmtGU->execute([$idGU]);
-                $libGU = $stmtGU->fetchColumn();
-                
-                $stmtType = $pdo->prepare("SELECT lib_type FROM type_utilisateur WHERE id_type = ?");
-                $stmtType->execute([$idType]);
-                $libType = $stmtType->fetchColumn();
-                
+                // Exécuter la requête
                 $stmt = $pdo->prepare($sql);
-                $stmt->execute([$libGU, $libType, $idGU, $libGU, $libType, $idGU, $libGU, $libType, $idGU]);
+                $stmt->execute([
+                    $idGU, $idType, // For personnel_admin
+                    $idGU, $idType, // For enseignant
+                    $idGU, $idType  // For etudiant
+                ]);
                 $utilisateurs = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 
                 echo json_encode(['success' => true, 'data' => $utilisateurs]);
@@ -108,7 +113,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 
             case 'generate_credentials':
                 $selectedUsers = json_decode($_POST['selected_users'], true);
-                $idGU = $_POST['id_GU'] ?? null;
+                $idGU = $_POST['id_GU'] ?? null; // The group ID to associate credentials with
                 
                 if (empty($selectedUsers) || empty($idGU)) {
                     throw new Exception("Sélection invalide");
@@ -122,10 +127,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $typeTable = $user['type_table'];
                     
                     // Générer un login unique
-                    $baseLogin = strtolower(substr($user['prenom'], 0, 1) . $user['nom']);
+                    $baseLogin = strtolower(substr($user['prenom'], 0, 1) . preg_replace('/[^a-zA-Z0-9]/', '', $user['nom']));
                     $baseLogin = preg_replace('/[^a-z0-9]/', '', $baseLogin);
                     
-                    // Vérifier l'unicité du login
                     $login = $baseLogin;
                     $counter = 1;
                     while (true) {
@@ -140,14 +144,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $password = generateRandomPassword();
                     $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
                     
-                    // Créer ou mettre à jour l'utilisateur
-                    if ($user['fk_id_util']) {
-                        // Mettre à jour l'utilisateur existant
-                        $stmt = $pdo->prepare("UPDATE utilisateur SET login_util = ?, mdp_util = ?, temp_password = ? WHERE id_util = ?");
-                        $stmt->execute([$login, $hashedPassword, $password, $user['fk_id_util']]);
+                    $idUtil = null;
+
+                    if (!empty($user['fk_id_util'])) {
+                        // Si fk_id_util existe déjà, c'est que l'utilisateur existe dans 'utilisateur' mais n'a pas de login
                         $idUtil = $user['fk_id_util'];
+                        $stmt = $pdo->prepare("UPDATE utilisateur SET login_util = ?, mdp_util = ?, temp_password = ? WHERE id_util = ?");
+                        $stmt->execute([$login, $hashedPassword, $password, $idUtil]);
                     } else {
-                        // Créer un nouvel utilisateur
+                        // Créer un nouvel utilisateur dans la table 'utilisateur'
                         $stmtMaxId = $pdo->query("SELECT COALESCE(MAX(id_util), 0) + 1 as next_id FROM utilisateur");
                         $nextId = $stmtMaxId->fetchColumn();
                         
@@ -155,7 +160,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         $stmt->execute([$nextId, $login, $hashedPassword, $password]);
                         $idUtil = $nextId;
                         
-                        // Mettre à jour la référence dans la table appropriée
+                        // Mettre à jour la référence fk_id_util dans la table d'origine
                         switch ($typeTable) {
                             case 'personnel':
                                 $stmt = $pdo->prepare("UPDATE personnel_admin SET fk_id_util = ? WHERE id_pers = ?");
@@ -170,19 +175,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                 $stmt->execute([$idUtil, $idOriginal]);
                                 break;
                         }
-                        
-                        // Créer la liaison dans posseder si elle n'existe pas
-                        $checkPosseder = $pdo->prepare("SELECT COUNT(*) FROM posseder WHERE fk_id_util = ?");
-                        $checkPosseder->execute([$idUtil]);
-                        if ($checkPosseder->fetchColumn() == 0) {
-                            $stmtMaxPoss = $pdo->query("SELECT COALESCE(MAX(id_poss), 0) + 1 as next_id FROM posseder");
-                            $nextPossId = $stmtMaxPoss->fetchColumn();
-                            
-                            $stmtPosseder = $pdo->prepare("INSERT INTO posseder (id_poss, fk_id_util, fk_id_GU, dte_poss) VALUES (?, ?, ?, CURDATE())");
-                            $stmtPosseder->execute([$nextPossId, $idUtil, $idGU]);
-                        }
                     }
                     
+                    // Vérifier si la liaison posseder existe déjà pour cet utilisateur et ce groupe
+                    $checkPosseder = $pdo->prepare("SELECT COUNT(*) FROM posseder WHERE fk_id_util = ? AND fk_id_GU = ?");
+                    $checkPosseder->execute([$idUtil, $idGU]);
+                    if ($checkPosseder->fetchColumn() == 0) {
+                        // Créer la liaison dans posseder (si elle n'existe pas, ou si le fk_id_util était NULL avant)
+                        $stmtMaxPoss = $pdo->query("SELECT COALESCE(MAX(id_poss), 0) + 1 as next_id FROM posseder");
+                        $nextPossId = $stmtMaxPoss->fetchColumn();
+                        
+                        $stmtPosseder = $pdo->prepare("INSERT INTO posseder (id_poss, fk_id_util, fk_id_GU, dte_poss) VALUES (?, ?, ?, CURDATE())");
+                        $stmtPosseder->execute([$nextPossId, $idUtil, $idGU]);
+                    }
+
                     $generatedUsers[] = [
                         'nom' => $user['nom'],
                         'prenom' => $user['prenom'],
@@ -210,21 +216,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         u.id_util,
                         u.login_util,
                         u.temp_password,
-                        CASE 
-                            WHEN pa.id_pers IS NOT NULL THEN pa.nom_pers
-                            WHEN e.id_ens IS NOT NULL THEN e.nom_ens
-                            WHEN et.num_etu IS NOT NULL THEN et.nom_etu
-                        END as nom,
-                        CASE 
-                            WHEN pa.id_pers IS NOT NULL THEN pa.prenoms_pers
-                            WHEN e.id_ens IS NOT NULL THEN e.prenom_ens
-                            WHEN et.num_etu IS NOT NULL THEN et.prenoms_etu
-                        END as prenom,
-                        CASE 
-                            WHEN pa.id_pers IS NOT NULL THEN pa.email_pers
-                            WHEN e.id_ens IS NOT NULL THEN e.email
-                            WHEN et.num_etu IS NOT NULL THEN et.email_etu
-                        END as email,
+                        COALESCE(pa.nom_pers, e.nom_ens, et.nom_etu) as nom,
+                        COALESCE(pa.prenoms_pers, e.prenom_ens, et.prenoms_etu) as prenom,
+                        COALESCE(pa.email_pers, e.email, et.email_etu) as email,
                         gu.lib_GU,
                         tu.lib_type
                     FROM utilisateur u
@@ -278,7 +272,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $idsUtilisateurs = json_decode($_POST['ids_utilisateurs'], true);
                 
                 foreach ($idsUtilisateurs as $idUtil) {
-                    // Remettre à NULL les identifiants
+                    // Remettre à NULL les identifiants (login, mdp, temp_password)
                     $stmt = $pdo->prepare("UPDATE utilisateur SET login_util = NULL, mdp_util = NULL, temp_password = NULL WHERE id_util = ?");
                     $stmt->execute([$idUtil]);
                 }
@@ -297,7 +291,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 // Fonction pour générer un mot de passe aléatoire
 function generateRandomPassword($length = 8) {
-    $chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+    $chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()'; // Added special chars
     return substr(str_shuffle($chars), 0, $length);
 }
 
@@ -316,8 +310,16 @@ try {
     $stmtTypes = $pdo->query("SELECT id_type, lib_type FROM type_utilisateur ORDER BY lib_type");
     $typesUtilisateur = $stmtTypes->fetchAll(PDO::FETCH_ASSOC);
     
-    // Récupérer tous les groupes d'utilisateur
-    $stmtGroupes = $pdo->query("SELECT id_GU, lib_GU FROM groupe_utilisateur ORDER BY lib_GU");
+    // Récupérer tous les groupes d'utilisateur et leurs id_type associés
+    $stmtGroupes = $pdo->query("
+        SELECT 
+            gu.id_GU, 
+            gu.lib_GU,
+            tg.id_type 
+        FROM groupe_utilisateur gu
+        LEFT JOIN type_groupe tg ON gu.id_GU = tg.id_GU
+        ORDER BY gu.lib_GU
+    ");
     $groupesUtilisateur = $stmtGroupes->fetchAll(PDO::FETCH_ASSOC);
     
 } catch (Exception $e) {
@@ -696,17 +698,17 @@ try {
             background-color: var(--success-600);
         }
 
-        /* Barre de recherche */
+        /* Barre de recherche (Unified styles with gestion_groupes.php, made more compact) */
         .search-bar {
             background: var(--white);
             border-radius: var(--radius-xl);
-            padding: var(--space-4) var(--space-6);
+            padding: var(--space-4) var(--space-4); /* Reduced padding */
             box-shadow: var(--shadow-sm);
             border: 1px solid var(--gray-200);
             margin-bottom: var(--space-6);
             display: flex;
             align-items: center;
-            gap: var(--space-4);
+            gap: var(--space-3); /* Reduced gap */
         }
 
         .search-input-container {
@@ -716,7 +718,7 @@ try {
 
         .search-input {
             width: 100%;
-            padding: var(--space-3) var(--space-10);
+            padding: var(--space-3) var(--space-8); /* Reduced right padding for icon */
             border: 1px solid var(--gray-300);
             border-radius: var(--radius-lg);
             font-size: var(--text-base);
@@ -738,23 +740,8 @@ try {
             color: var(--gray-400);
         }
 
-        .search-button {
-            padding: var(--space-3) var(--space-5);
-            border-radius: var(--radius-lg);
-            font-weight: 600;
-            cursor: pointer;
-            transition: all var(--transition-fast);
-            border: none;
-            display: inline-flex;
-            align-items: center;
-            gap: var(--space-2);
-            background-color: var(--accent-600);
-            color: white;
-        }
-
-        .search-button:hover {
-            background-color: var(--accent-700);
-        }
+        /* Search button is not present as per new design request, only input */
+        /* .search-button { ... } */
 
         .download-buttons {
             display: flex;
@@ -818,7 +805,7 @@ try {
             border-collapse: collapse;
             font-size: var(--text-sm);
             color: var(--gray-800);
-            min-width: 900px; /* Adjusted for more columns */
+            min-width: 800px; /* Adjusted min-width after removing email column */
         }
 
         .data-table th,
@@ -1204,6 +1191,7 @@ try {
             .search-bar {
                 flex-direction: column;
                 align-items: stretch;
+                padding: var(--space-4); /* Ensure padding consistency for mobile */
             }
             
             .download-buttons {
@@ -1259,10 +1247,10 @@ try {
                 flex-wrap: wrap;
             }
             
-            .search-button {
+            /* .search-button { // Removed search button
                 width: 100%;
                 justify-content: center;
-            }
+            } */
         }
     </style>
 </head>
@@ -1324,9 +1312,6 @@ try {
                         <i class="fas fa-search search-icon"></i>
                         <input type="text" id="searchInputSans" class="search-input" placeholder="Rechercher un utilisateur...">
                     </div>
-                    <button class="search-button" id="searchButtonSans">
-                        <i class="fas fa-search"></i> Rechercher
-                    </button>
                     <div class="download-buttons">
                         <button class="download-button" id="exportPdfSansBtn">
                             <i class="fas fa-file-pdf"></i> PDF
@@ -1380,7 +1365,6 @@ try {
                                     </th>
                                     <th>Nom</th>
                                     <th>Prénom</th>
-                                    <th>Email</th>
                                     <th>Type</th>
                                     <th>Groupe</th>
                                 </tr>
@@ -1400,9 +1384,6 @@ try {
                         <i class="fas fa-search search-icon"></i>
                         <input type="text" id="searchInputAvec" class="search-input" placeholder="Rechercher un utilisateur...">
                     </div>
-                    <button class="search-button" id="searchButtonAvec">
-                        <i class="fas fa-search"></i> Rechercher
-                    </button>
                     <div class="download-buttons">
                         <button class="download-button" id="exportPdfAvecBtn">
                             <i class="fas fa-file-pdf"></i> PDF
@@ -1454,10 +1435,7 @@ try {
                             <button class="btn btn-secondary" id="supprimerAvecIdentBtn" disabled>
                                 <i class="fas fa-trash-alt"></i> <span class="action-text">Supprimer</span>
                             </button>
-                            <button class="btn btn-secondary" id="rafraichirAvecIdentBtn">
-                                <i class="fas fa-sync-alt"></i> <span class="action-text">Rafraîchir</span>
-                            </button>
-                        </div>
+                            </div>
                     </div>
                     <div class="table-container">
                         <table class="data-table" id="avecIdentifiantsTable">
@@ -1471,7 +1449,6 @@ try {
                                     </th>
                                     <th>Nom</th>
                                     <th>Prénom</th>
-                                    <th>Email</th>
                                     <th>Login</th>
                                     <th>Mot de passe</th>
                                     <th>Groupe</th>
@@ -1499,11 +1476,8 @@ try {
         const groupesParType = <?php
             $groupesParType = [];
             foreach ($groupesUtilisateur as $groupe) {
-                // Ensure to fetch the id_type associated with each group_utilisateur
-                // This assumes a 'type_groupe' table links id_type and id_GU.
-                $stmt = $pdo->prepare("SELECT id_type FROM type_groupe WHERE id_GU = ?");
-                $stmt->execute([$groupe['id_GU']]);
-                $idType = $stmt->fetchColumn();
+                // Use the 'id_type' directly from the fetched $groupe array
+                $idType = $groupe['id_type']; 
                 if ($idType) {
                     if (!isset($groupesParType[$idType])) {
                         $groupesParType[$idType] = [];
@@ -1533,7 +1507,7 @@ try {
 
         const searchBarSansIdentifiants = document.getElementById('searchBarSansIdentifiants');
         const searchInputSans = document.getElementById('searchInputSans');
-        const searchButtonSans = document.getElementById('searchButtonSans');
+        // searchButtonSans removed
         const exportPdfSansBtn = document.getElementById('exportPdfSansBtn');
         const exportExcelSansBtn = document.getElementById('exportExcelSansBtn');
         const exportCsvSansBtn = document.getElementById('exportCsvSansBtn');
@@ -1543,7 +1517,7 @@ try {
 
         const searchBarAvecIdentifiants = document.getElementById('searchBarAvecIdentifiants');
         const searchInputAvec = document.getElementById('searchInputAvec');
-        const searchButtonAvec = document.getElementById('searchButtonAvec');
+        // searchButtonAvec removed
         const exportPdfAvecBtn = document.getElementById('exportPdfAvecBtn');
         const exportExcelAvecBtn = document.getElementById('exportExcelAvecBtn');
         const exportCsvAvecBtn = document.getElementById('exportCsvAvecBtn');
@@ -1553,7 +1527,7 @@ try {
 
         const modifierAvecIdentBtn = document.getElementById('modifierAvecIdentBtn');
         const supprimerAvecIdentBtn = document.getElementById('supprimerAvecIdentBtn');
-        const rafraichirAvecIdentBtn = document.getElementById('rafraichirAvecIdentBtn');
+        // rafraichirAvecIdentBtn removed
 
         const messageModal = document.getElementById('messageModal');
         const messageTitle = document.getElementById('messageTitle');
@@ -1736,6 +1710,16 @@ try {
                     searchBarSansIdentifiants.style.display = 'flex'; // Show search bar
                 } else {
                     showAlert(result.message, 'error');
+                    sansIdentifiantsTableBody.innerHTML = `
+                        <tr>
+                            <td colspan="5" style="text-align: center; color: var(--gray-500); padding: var(--space-8);">
+                                <i class="fas fa-users-slash" style="font-size: 2rem; margin-bottom: var(--space-2);"></i><br>
+                                ${result.message}
+                            </td>
+                        </tr>
+                    `; // Changed colspan to 5
+                    sansIdentifiantsCard.style.display = 'block'; // Still show the card to display message
+                    searchBarSansIdentifiants.style.display = 'none'; // Hide search bar if no data
                 }
             } catch (error) {
                 showAlert('Erreur lors de la récupération des données', 'error');
@@ -1750,17 +1734,18 @@ try {
             if (users.length === 0) {
                 sansIdentifiantsTableBody.innerHTML = `
                     <tr>
-                        <td colspan="6" style="text-align: center; color: var(--gray-500); padding: var(--space-8);">
+                        <td colspan="5" style="text-align: center; color: var(--gray-500); padding: var(--space-8);">
                             <i class="fas fa-users" style="font-size: 2rem; margin-bottom: var(--space-2);"></i><br>
                             Aucun utilisateur sans identifiant trouvé pour cette sélection.
                         </td>
                     </tr>
-                `;
+                `; // Changed colspan to 5
             } else {
                 users.forEach(user => {
                     const row = sansIdentifiantsTableBody.insertRow();
                     row.setAttribute('data-id-original', user.id_original);
                     row.setAttribute('data-type-table', user.type_table);
+                    row.setAttribute('data-fk-id-util', user.fk_id_util); // Add fk_id_util to row for easier access
                     row.innerHTML = `
                         <td>
                             <label class="checkbox-container">
@@ -1770,7 +1755,6 @@ try {
                         </td>
                         <td>${user.nom}</td>
                         <td>${user.prenom}</td>
-                        <td>${user.email}</td>
                         <td>${user.lib_type || 'N/A'}</td>
                         <td>${user.lib_GU || 'N/A'}</td>
                     `;
@@ -1905,8 +1889,8 @@ try {
                     }
                     
                     // Refresh both tables
-                    selectionForm.dispatchEvent(new Event('submit'));
-                    loadUsersWithCredentials();
+                    selectionForm.dispatchEvent(new Event('submit')); // Re-filter "sans identifiants"
+                    loadUsersWithCredentials(); // Reload "avec identifiants"
                 } else {
                     showAlert(result.message, 'error');
                 }
@@ -1943,12 +1927,12 @@ try {
             if (users.length === 0) {
                 avecIdentifiantsTableBody.innerHTML = `
                     <tr>
-                        <td colspan="9" style="text-align: center; color: var(--gray-500); padding: var(--space-8);">
+                        <td colspan="8" style="text-align: center; color: var(--gray-500); padding: var(--space-8);">
                             <i class="fas fa-key" style="font-size: 2rem; margin-bottom: var(--space-2);"></i><br>
                             Aucun utilisateur avec identifiants généré.
                         </td>
                     </tr>
-                `;
+                `; // Changed colspan to 8
             } else {
                 users.forEach(user => {
                     const row = avecIdentifiantsTableBody.insertRow();
@@ -1962,7 +1946,6 @@ try {
                         </td>
                         <td>${user.nom || ''}</td>
                         <td>${user.prenom || ''}</td>
-                        <td>${user.email || ''}</td>
                         <td><strong>${user.login_util}</strong></td>
                         <td><span style="background: var(--gray-100); padding: 2px 6px; border-radius: 4px; font-family: monospace;">${user.temp_password || '••••••••'}</span></td>
                         <td>${user.lib_GU || 'N/A'}</td>
@@ -2003,7 +1986,7 @@ try {
         function modifierUtilisateurAvecIdent(idUtil) {
             const row = document.querySelector(`tr[data-id="${idUtil}"]`);
             if (row) {
-                const currentLogin = row.cells[4].textContent.trim();
+                const currentLogin = row.cells[3].textContent.trim(); // Adjusted index due to email column removal
                 
                 const newLogin = prompt(`Modifier le login pour cet utilisateur:\n\nLogin actuel: ${currentLogin}`, currentLogin);
                 if (newLogin !== null) { // User clicked OK or entered something
@@ -2055,7 +2038,7 @@ try {
 
                         if (result.success) {
                             showAlert(result.message);
-                            loadUsersWithCredentials();
+                            loadUsersWithCredentials(); // Reload table after delete
                             selectedUsersAvec.delete(idUtil);
                             updateActionButtonsAvecIdent();
                         } else {
@@ -2109,36 +2092,60 @@ try {
             }
         });
 
-        // Refresh button for users with credentials
-        rafraichirAvecIdentBtn.addEventListener('click', loadUsersWithCredentials);
+        // Refresh button for users with credentials (Removed)
+        // rafraichirAvecIdentBtn.addEventListener('click', loadUsersWithCredentials);
 
         // Search functionality for "sans identifiants" table
-        searchButtonSans.addEventListener('click', searchUsersSans);
         searchInputSans.addEventListener('keyup', function(e) {
-            if (e.key === 'Enter') {
-                searchUsersSans();
-            }
+            searchUsersSans(); // Live search
         });
 
         function searchUsersSans() {
             const searchTerm = searchInputSans.value.toLowerCase();
             const rows = sansIdentifiantsTableBody.querySelectorAll('tr');
+            let foundRows = 0;
             
             rows.forEach(row => {
-                if (row.querySelector('td[colspan="6"]')) return; // Ignore empty message
+                if (row.querySelector('td[colspan="5"]')) { // This is the empty message row
+                    row.style.display = 'none'; // Hide it if present
+                    return; 
+                }
                 
                 const nom = row.cells[1].textContent.toLowerCase();
                 const prenom = row.cells[2].textContent.toLowerCase();
-                const email = row.cells[3].textContent.toLowerCase();
-                const type = row.cells[4].textContent.toLowerCase();
-                const groupe = row.cells[5].textContent.toLowerCase();
+                // const email = row.cells[3].textContent.toLowerCase(); // Removed email search
+                const type = row.cells[3].textContent.toLowerCase(); // Adjusted index
+                const groupe = row.cells[4].textContent.toLowerCase(); // Adjusted index
                 
-                if (nom.includes(searchTerm) || prenom.includes(searchTerm) || email.includes(searchTerm) || type.includes(searchTerm) || groupe.includes(searchTerm)) {
+                if (nom.includes(searchTerm) || prenom.includes(searchTerm) || type.includes(searchTerm) || groupe.includes(searchTerm)) {
                     row.style.display = '';
+                    foundRows++;
                 } else {
                     row.style.display = 'none';
                 }
             });
+
+            // Display "no results" message if no rows match search
+            if (foundRows === 0 && searchTerm !== "") {
+                const noResultsRow = sansIdentifiantsTableBody.querySelector('.no-results-message');
+                if (!noResultsRow) {
+                    sansIdentifiantsTableBody.innerHTML += `
+                        <tr class="no-results-message">
+                            <td colspan="5" style="text-align: center; color: var(--gray-500); padding: var(--space-8);">
+                                <i class="fas fa-search-minus" style="font-size: 2rem; margin-bottom: var(--space-2);"></i><br>
+                                Aucun résultat trouvé pour votre recherche.
+                            </td>
+                        </tr>
+                    `; // Changed colspan to 5
+                } else {
+                    noResultsRow.style.display = '';
+                }
+            } else {
+                const noResultsRow = sansIdentifiantsTableBody.querySelector('.no-results-message');
+                if (noResultsRow) {
+                    noResultsRow.style.display = 'none';
+                }
+            }
         }
 
         // Filter functionality for "sans identifiants" table
@@ -2155,26 +2162,25 @@ try {
         });
 
         function applyFilterSans(filterType) {
-            const rows = Array.from(sansIdentifiantsTableBody.querySelectorAll('tr'));
+            const rows = Array.from(sansIdentifiantsTableBody.querySelectorAll('tr:not(.no-results-message)')); // Exclude no-results message
             
-            const emptyRow = sansIdentifiantsTableBody.querySelector('td[colspan="6"]');
-            if (emptyRow) {
-                emptyRow.closest('tr').remove();
+            // Remove the empty message if it exists
+            const emptyMessageRow = sansIdentifiantsTableBody.querySelector('td[colspan="5"]');
+            if (emptyMessageRow) {
+                emptyMessageRow.closest('tr').remove();
             }
             
+            // Show all rows before applying the filter (important for re-sorting)
             rows.forEach(row => {
-                if (!row.querySelector('td[colspan="6"]')) {
-                    row.style.display = '';
-                }
+                row.style.display = '';
             });
             
+            // Sort rows based on the filter type
             rows.sort((a, b) => {
-                if (a.querySelector('td[colspan="6"]') || b.querySelector('td[colspan="6"]')) return 0;
-                
                 const nomA = a.cells[1].textContent.toLowerCase();
                 const nomB = b.cells[1].textContent.toLowerCase();
-                const typeA = a.cells[4].textContent.toLowerCase();
-                const typeB = b.cells[4].textContent.toLowerCase();
+                const typeA = a.cells[3].textContent.toLowerCase(); // Adjusted index
+                const typeB = b.cells[3].textContent.toLowerCase(); // Adjusted index
                 
                 switch (filterType) {
                     case 'name-asc':
@@ -2184,54 +2190,85 @@ try {
                     case 'type-asc':
                         return typeA.localeCompare(typeB);
                     default:
-                        return 0;
+                        return 0; // 'all' filter, no specific sorting
                 }
             });
             
+            // Reorder the rows in the DOM
+            sansIdentifiantsTableBody.innerHTML = ''; // Clear current rows
             rows.forEach(row => {
                 sansIdentifiantsTableBody.appendChild(row);
             });
             
-            if (rows.length === 0 || (rows.length === 1 && rows[0].querySelector('td[colspan="6"]'))) {
+            // If no rows after filtering (or if only empty message was present)
+            if (rows.length === 0) {
                 sansIdentifiantsTableBody.innerHTML = `
                     <tr>
-                        <td colspan="6" style="text-align: center; color: var(--gray-500); padding: var(--space-8);">
+                        <td colspan="5" style="text-align: center; color: var(--gray-500); padding: var(--space-8);">
                             <i class="fas fa-users" style="font-size: 2rem; margin-bottom: var(--space-2);"></i><br>
                             Aucun utilisateur sans identifiant trouvé pour cette sélection.
                         </td>
                     </tr>
-                `;
+                `; // Changed colspan to 5
+            }
+            // Re-apply search filter if there's a search term
+            if (searchInputSans.value.length > 0) {
+                searchUsersSans();
             }
         }
 
         // Search functionality for "avec identifiants" table
-        searchButtonAvec.addEventListener('click', searchUsersAvec);
         searchInputAvec.addEventListener('keyup', function(e) {
-            if (e.key === 'Enter') {
-                searchUsersAvec();
-            }
+            searchUsersAvec(); // Live search
         });
 
         function searchUsersAvec() {
             const searchTerm = searchInputAvec.value.toLowerCase();
             const rows = avecIdentifiantsTableBody.querySelectorAll('tr');
+            let foundRows = 0;
             
             rows.forEach(row => {
-                if (row.querySelector('td[colspan="9"]')) return; // Ignore empty message
+                if (row.querySelector('td[colspan="8"]')) { // This is the empty message row
+                    row.style.display = 'none'; // Hide it if present
+                    return;
+                }
                 
                 const nom = row.cells[1].textContent.toLowerCase();
                 const prenom = row.cells[2].textContent.toLowerCase();
-                const email = row.cells[3].textContent.toLowerCase();
-                const login = row.cells[4].textContent.toLowerCase();
-                const groupe = row.cells[6].textContent.toLowerCase();
-                const type = row.cells[7].textContent.toLowerCase();
+                // const email = row.cells[3].textContent.toLowerCase(); // Removed email search
+                const login = row.cells[3].textContent.toLowerCase(); // Adjusted index
+                const groupe = row.cells[5].textContent.toLowerCase(); // Adjusted index
+                const type = row.cells[6].textContent.toLowerCase(); // Adjusted index
                 
-                if (nom.includes(searchTerm) || prenom.includes(searchTerm) || email.includes(searchTerm) || login.includes(searchTerm) || groupe.includes(searchTerm) || type.includes(searchTerm)) {
+                if (nom.includes(searchTerm) || prenom.includes(searchTerm) || login.includes(searchTerm) || groupe.includes(searchTerm) || type.includes(searchTerm)) {
                     row.style.display = '';
+                    foundRows++;
                 } else {
                     row.style.display = 'none';
                 }
             });
+
+            // Display "no results" message if no rows match search
+            if (foundRows === 0 && searchTerm !== "") {
+                const noResultsRow = avecIdentifiantsTableBody.querySelector('.no-results-message');
+                if (!noResultsRow) {
+                    avecIdentifiantsTableBody.innerHTML += `
+                        <tr class="no-results-message">
+                            <td colspan="8" style="text-align: center; color: var(--gray-500); padding: var(--space-8);">
+                                <i class="fas fa-search-minus" style="font-size: 2rem; margin-bottom: var(--space-2);"></i><br>
+                                Aucun résultat trouvé pour votre recherche.
+                            </td>
+                        </tr>
+                    `; // Changed colspan to 8
+                } else {
+                    noResultsRow.style.display = '';
+                }
+            } else {
+                const noResultsRow = avecIdentifiantsTableBody.querySelector('.no-results-message');
+                if (noResultsRow) {
+                    noResultsRow.style.display = 'none';
+                }
+            }
         }
 
         // Filter functionality for "avec identifiants" table
@@ -2248,30 +2285,26 @@ try {
         });
 
         function applyFilterAvec(filterType) {
-            const rows = Array.from(avecIdentifiantsTableBody.querySelectorAll('tr'));
+            const rows = Array.from(avecIdentifiantsTableBody.querySelectorAll('tr:not(.no-results-message)'));
             
-            const emptyRow = avecIdentifiantsTableBody.querySelector('td[colspan="9"]');
-            if (emptyRow) {
-                emptyRow.closest('tr').remove();
+            const emptyMessageRow = avecIdentifiantsTableBody.querySelector('td[colspan="8"]');
+            if (emptyMessageRow) {
+                emptyMessageRow.closest('tr').remove();
             }
-            
+
             rows.forEach(row => {
-                if (!row.querySelector('td[colspan="9"]')) {
-                    row.style.display = '';
-                }
+                row.style.display = '';
             });
             
             rows.sort((a, b) => {
-                if (a.querySelector('td[colspan="9"]') || b.querySelector('td[colspan="9"]')) return 0;
-                
                 const idA = parseInt(a.getAttribute('data-id'));
                 const idB = parseInt(b.getAttribute('data-id'));
                 const nomA = a.cells[1].textContent.toLowerCase();
                 const nomB = b.cells[1].textContent.toLowerCase();
-                const typeA = a.cells[7].textContent.toLowerCase();
-                const typeB = b.cells[7].textContent.toLowerCase();
-                const groupA = a.cells[6].textContent.toLowerCase();
-                const groupB = b.cells[6].textContent.toLowerCase();
+                const typeA = a.cells[6].textContent.toLowerCase(); // Adjusted index
+                const typeB = b.cells[6].textContent.toLowerCase(); // Adjusted index
+                const groupA = a.cells[5].textContent.toLowerCase(); // Adjusted index
+                const groupB = b.cells[5].textContent.toLowerCase(); // Adjusted index
                 
                 switch (filterType) {
                     case 'id-asc':
@@ -2291,19 +2324,24 @@ try {
                 }
             });
             
+            avecIdentifiantsTableBody.innerHTML = '';
             rows.forEach(row => {
                 avecIdentifiantsTableBody.appendChild(row);
             });
             
-            if (rows.length === 0 || (rows.length === 1 && rows[0].querySelector('td[colspan="9"]'))) {
+            if (rows.length === 0) {
                 avecIdentifiantsTableBody.innerHTML = `
                     <tr>
-                        <td colspan="9" style="text-align: center; color: var(--gray-500); padding: var(--space-8);">
+                        <td colspan="8" style="text-align: center; color: var(--gray-500); padding: var(--space-8);">
                             <i class="fas fa-key" style="font-size: 2rem; margin-bottom: var(--space-2);"></i><br>
                             Aucun utilisateur avec identifiants généré.
                         </td>
                     </tr>
-                `;
+                `; // Changed colspan to 8
+            }
+            // Re-apply search filter if there's a search term
+            if (searchInputAvec.value.length > 0) {
+                searchUsersAvec();
             }
         }
 
@@ -2327,19 +2365,16 @@ try {
             doc.setFontSize(10);
             doc.text(`Exporté le: ${date}`, 14, 30);
             
-            const headers = [['Nom', 'Prénom', 'Email', 'Type', 'Groupe']];
+            const headers = [['Nom', 'Prénom', 'Type', 'Groupe']]; // Removed Email
             const data = [];
             
-            document.querySelectorAll('#sansIdentifiantsTable tbody tr').forEach(row => {
-                if (!row.querySelector('td[colspan="6"]')) {
-                    data.push([
-                        row.cells[1].textContent,
-                        row.cells[2].textContent,
-                        row.cells[3].textContent,
-                        row.cells[4].textContent,
-                        row.cells[5].textContent
-                    ]);
-                }
+            document.querySelectorAll('#sansIdentifiantsTable tbody tr:not(.no-results-message)').forEach(row => {
+                data.push([
+                    row.cells[1].textContent,
+                    row.cells[2].textContent,
+                    row.cells[3].textContent, // Adjusted index
+                    row.cells[4].textContent  // Adjusted index
+                ]);
             });
             
             doc.autoTable({
@@ -2357,24 +2392,21 @@ try {
 
         // Export to Excel for "sans identifiants"
         exportExcelSansBtn.addEventListener('click', function() {
-            const rows = sansIdentifiantsTableBody.querySelectorAll('tr');
-            if (rows.length === 1 && rows[0].querySelector('td[colspan="6"]')) {
+            const rows = sansIdentifiantsTableBody.querySelectorAll('tr:not(.no-results-message)');
+            if (rows.length === 0 || (rows.length === 1 && rows[0].querySelector('td[colspan="5"]'))) { // Adjusted colspan
                 showAlert('Aucune donnée à exporter', 'warning');
                 return;
             }
 
-            const data = [['Nom', 'Prénom', 'Email', 'Type', 'Groupe']];
+            const data = [['Nom', 'Prénom', 'Type', 'Groupe']]; // Removed Email
             
             rows.forEach(row => {
-                if (!row.querySelector('td[colspan="6"]')) {
-                    data.push([
-                        row.cells[1].textContent,
-                        row.cells[2].textContent,
-                        row.cells[3].textContent,
-                        row.cells[4].textContent,
-                        row.cells[5].textContent
-                    ]);
-                }
+                data.push([
+                    row.cells[1].textContent,
+                    row.cells[2].textContent,
+                    row.cells[3].textContent, // Adjusted index
+                    row.cells[4].textContent  // Adjusted index
+                ]);
             });
 
             const ws = XLSX.utils.aoa_to_sheet(data);
@@ -2388,12 +2420,10 @@ try {
 
         // Export to CSV for "sans identifiants"
         exportCsvSansBtn.addEventListener('click', function() {
-            let csv = "Nom,Prénom,Email,Type,Groupe\n";
+            let csv = "Nom,Prénom,Type,Groupe\n"; // Removed Email
             
-            document.querySelectorAll('#sansIdentifiantsTable tbody tr').forEach(row => {
-                if (!row.querySelector('td[colspan="6"]')) {
-                    csv += `"${row.cells[1].textContent}","${row.cells[2].textContent}","${row.cells[3].textContent}","${row.cells[4].textContent}","${row.cells[5].textContent}"\n`;
-                }
+            document.querySelectorAll('#sansIdentifiantsTable tbody tr:not(.no-results-message)').forEach(row => {
+                csv += `"${row.cells[1].textContent}","${row.cells[2].textContent}","${row.cells[3].textContent}","${row.cells[4].textContent}"\n`; // Adjusted indices
             });
             
             const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
@@ -2423,21 +2453,18 @@ try {
             doc.setFontSize(10);
             doc.text(`Exporté le: ${date}`, 14, 30);
             
-            const headers = [['Nom', 'Prénom', 'Email', 'Login', 'Mot de passe', 'Groupe', 'Type']];
+            const headers = [['Nom', 'Prénom', 'Login', 'Mot de passe', 'Groupe', 'Type']]; // Removed Email
             const data = [];
             
-            document.querySelectorAll('#avecIdentifiantsTable tbody tr').forEach(row => {
-                if (!row.querySelector('td[colspan="9"]')) {
-                    data.push([
-                        row.cells[1].textContent,
-                        row.cells[2].textContent,
-                        row.cells[3].textContent,
-                        row.cells[4].textContent,
-                        row.cells[5].textContent.replace(/•/g, ''), // Clean bullets
-                        row.cells[6].textContent,
-                        row.cells[7].textContent
-                    ]);
-                }
+            document.querySelectorAll('#avecIdentifiantsTable tbody tr:not(.no-results-message)').forEach(row => {
+                data.push([
+                    row.cells[1].textContent,
+                    row.cells[2].textContent,
+                    row.cells[3].textContent, // Adjusted index
+                    row.cells[4].textContent.replace(/•/g, ''), // Adjusted index, Clean bullets
+                    row.cells[5].textContent, // Adjusted index
+                    row.cells[6].textContent  // Adjusted index
+                ]);
             });
             
             doc.autoTable({
@@ -2455,26 +2482,23 @@ try {
 
         // Export to Excel for "avec identifiants"
         exportExcelAvecBtn.addEventListener('click', function() {
-            const rows = avecIdentifiantsTableBody.querySelectorAll('tr');
-            if (rows.length === 1 && rows[0].querySelector('td[colspan="9"]')) {
+            const rows = avecIdentifiantsTableBody.querySelectorAll('tr:not(.no-results-message)');
+            if (rows.length === 0 || (rows.length === 1 && rows[0].querySelector('td[colspan="8"]'))) { // Adjusted colspan
                 showAlert('Aucune donnée à exporter', 'warning');
                 return;
             }
 
-            const data = [['Nom', 'Prénom', 'Email', 'Login', 'Mot de passe', 'Groupe', 'Type']];
+            const data = [['Nom', 'Prénom', 'Login', 'Mot de passe', 'Groupe', 'Type']]; // Removed Email
             
             rows.forEach(row => {
-                if (!row.querySelector('td[colspan="9"]')) {
-                    data.push([
-                        row.cells[1].textContent,
-                        row.cells[2].textContent,
-                        row.cells[3].textContent,
-                        row.cells[4].textContent,
-                        row.cells[5].textContent.replace(/•/g, ''), // Clean bullets
-                        row.cells[6].textContent,
-                        row.cells[7].textContent
-                    ]);
-                }
+                data.push([
+                    row.cells[1].textContent,
+                    row.cells[2].textContent,
+                    row.cells[3].textContent, // Adjusted index
+                    row.cells[4].textContent.replace(/•/g, ''), // Adjusted index, Clean bullets
+                    row.cells[5].textContent, // Adjusted index
+                    row.cells[6].textContent  // Adjusted index
+                ]);
             });
 
             const ws = XLSX.utils.aoa_to_sheet(data);
@@ -2488,12 +2512,10 @@ try {
 
         // Export to CSV for "avec identifiants"
         exportCsvAvecBtn.addEventListener('click', function() {
-            let csv = "Nom,Prénom,Email,Login,Mot de passe,Groupe,Type\n";
+            let csv = "Nom,Prénom,Login,Mot de passe,Groupe,Type\n"; // Removed Email
             
-            document.querySelectorAll('#avecIdentifiantsTable tbody tr').forEach(row => {
-                if (!row.querySelector('td[colspan="9"]')) {
-                    csv += `"${row.cells[1].textContent}","${row.cells[2].textContent}","${row.cells[3].textContent}","${row.cells[4].textContent}","${row.cells[5].textContent.replace(/•/g, '')}","${row.cells[6].textContent}","${row.cells[7].textContent}"\n`;
-                }
+            document.querySelectorAll('#avecIdentifiantsTable tbody tr:not(.no-results-message)').forEach(row => {
+                csv += `"${row.cells[1].textContent}","${row.cells[2].textContent}","${row.cells[3].textContent}","${row.cells[4].textContent.replace(/•/g, '')}","${row.cells[5].textContent}","${row.cells[6].textContent}"\n`; // Adjusted indices
             });
             
             const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });

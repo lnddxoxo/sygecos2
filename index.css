@@ -395,103 +395,98 @@ body {
     box-shadow: var(--shadow-lg);
 }
 
-/* === SECTION UNIVERSITÉ SLIDER === */
+/* === SECTION UNIVERSITÉ === */
 .university-section {
     padding: var(--space-20) var(--space-6);
-    position: relative;
+    background: var(--primary-100); /* Slightly off-white background */
+    text-align: center;
 }
 
-.university-slider {
-    position: relative;
-    height: 60vh;
-    overflow: hidden;
+.university-container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.university-section .section-title {
+    margin-bottom: var(--space-12);
+    color: var(--primary-900);
+}
+
+/* New style for centering the university section title */
+.university-title-centered {
+    text-align: center;
+}
+
+.university-feature {
+    display: flex;
+    align-items: center;
+    gap: var(--space-12);
+    margin-bottom: var(--space-16);
+    text-align: left;
+}
+
+.university-feature:last-child {
+    margin-bottom: 0;
+}
+
+.university-feature.reversed-layout {
+    flex-direction: row-reverse; /* Image right, text left */
+}
+
+.university-image-wrapper {
+    flex-shrink: 0; /* Prevents shrinking */
+    width: 400px; /* Fixed width for the square container */
+    height: 400px; /* Fixed height for the square container */
     border-radius: var(--radius-3xl);
+    overflow: hidden;
     box-shadow: var(--shadow-xl);
-    margin-bottom: var(--space-8);
-}
-
-.university-slide {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    opacity: 0;
-    transition: opacity 1s ease-in-out;
-    background-size: cover;
-    background-position: center;
+    background: var(--primary-200); /* Placeholder background */
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
-.university-slide.active {
-    opacity: 1;
-}
-
-.university-slide::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
+.university-feature-img {
     width: 100%;
     height: 100%;
-    background: linear-gradient(135deg, rgba(0,0,0,0.3), rgba(0,0,0,0.1));
-    z-index: 1;
+    object-fit: cover; /* Covers the area, cropping if necessary */
+    display: block;
+    transition: transform var(--transition-normal);
 }
 
-.university-content {
-    position: relative;
-    z-index: 2;
-    text-align: center;
-    color: white;
-    max-width: 800px;
-    padding: var(--space-6);
-}
-
-.university-content h2 {
-    font-size: var(--text-5xl);
-    font-weight: 800;
-    margin-bottom: var(--space-4);
-    text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
-}
-
-.university-content p {
-    font-size: var(--text-xl);
-    text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
-    line-height: 1.6;
-}
-
-.university-pagination {
-    display: flex;
-    gap: var(--space-3);
-    justify-content: center;
-    margin-top: var(--space-6);
-}
-
-.university-thumb {
-    width: 100px;
-    height: 80px;
-    border-radius: var(--radius-lg);
-    overflow: hidden;
-    cursor: pointer;
-    border: 3px solid var(--gray-300);
-    transition: all var(--transition-normal);
-    background-size: cover;
-    background-position: center;
-}
-
-.university-thumb:hover,
-.university-thumb.active {
-    border-color: var(--accent-500);
+.university-feature-img:hover {
     transform: scale(1.05);
-    box-shadow: var(--shadow-lg);
+}
+
+.university-text-content {
+    flex: 1; /* Takes available space */
+    min-width: 300px; /* Minimum width before wrapping */
+    padding: var(--space-6); /* Padding inside the text content box */
+}
+
+.university-text-content h3 {
+    font-size: var(--text-3xl);
+    font-weight: 700;
+    color: var(--primary-800);
+    margin-bottom: var(--space-4);
+}
+
+.university-text-content p {
+    color: var(--primary-600);
+    line-height: 1.8;
+    margin-bottom: var(--space-4);
+    font-size: var(--text-base);
+}
+
+.university-text-content p:last-child {
+    margin-bottom: 0;
 }
 
 /* === SECTION PROCESSUS === */
 .process {
     padding: var(--space-20) var(--space-6);
     position: relative;
+    background: var(--primary-50);
 }
 
 .process-container {
@@ -609,6 +604,7 @@ body {
 .final-image-section {
     padding: var(--space-20) var(--space-6);
     position: relative;
+    background: var(--primary-100); /* Consistent background */
 }
 
 .final-image-container {
@@ -713,6 +709,35 @@ body {
     }
 }
 
+@media (max-width: 992px) {
+    .university-feature {
+        flex-direction: column; /* Stack image and text on medium screens */
+        text-align: center;
+    }
+
+    .university-feature.reversed-layout {
+        flex-direction: column; /* Also stack for reversed layout */
+    }
+
+    .university-image-wrapper {
+        width: 100%; /* Make image container fluid */
+        height: 300px; /* Adjust height for smaller screens */
+        margin-bottom: var(--space-6); /* Space between image and text */
+    }
+
+    .university-text-content {
+        min-width: unset; /* Remove min-width to allow full width */
+        max-width: 800px; /* Constrain max-width for readability on wider stacked views */
+        margin: 0 auto; /* Center text content */
+    }
+
+    .university-text-content h3,
+    .university-text-content p {
+        text-align: center; /* Center text when stacked */
+    }
+}
+
+
 @media (max-width: 768px) {
     .nav-menu {
         display: none;
@@ -720,10 +745,6 @@ body {
 
     .slide-content h1 {
         font-size: var(--text-4xl);
-    }
-
-    .university-content h2 {
-        font-size: var(--text-3xl);
     }
 
     .section-title {
@@ -741,22 +762,16 @@ body {
         justify-content: center;
     }
 
-    .university-slider {
-        height: 40vh;
-    }
-
     .final-image {
         height: 300px;
     }
 
-    .slider-pagination,
-    .university-pagination {
+    .slider-pagination {
         flex-wrap: wrap;
         gap: var(--space-2);
     }
 
-    .pagination-thumb,
-    .university-thumb {
+    .pagination-thumb {
         width: 60px;
         height: 45px;
     }
@@ -772,6 +787,22 @@ body {
 
     .final-image-content p {
         font-size: var(--text-lg);
+    }
+
+    .university-section .section-title {
+        font-size: var(--text-2xl);
+    }
+
+    .university-text-content h3 {
+        font-size: var(--text-xl);
+    }
+
+    .university-text-content p {
+        font-size: var(--text-sm);
+    }
+
+    .university-image-wrapper {
+        height: 200px; /* Further reduce height on very small screens */
     }
 }
 
@@ -801,4 +832,10 @@ body {
 .scroll-reveal.revealed {
     opacity: 1;
     transform: translateY(0);
+}
+
+/* Hover effects for universal elements */
+.nav-link, .login-btn, .btn-primary-hero, .btn-secondary-hero,
+.pagination-thumb, .process-card, .footer-section a, .university-feature-img {
+    transition: all var(--transition-normal);
 }

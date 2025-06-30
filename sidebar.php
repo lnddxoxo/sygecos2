@@ -139,7 +139,7 @@
                         <div class="nav-icon">
                             <i class="fas fa-user-shield"></i>
                         </div>
-         <span class="nav-text">Dossier du personnel administratif</span>
+         <span class="nav-text">Dossier du personnel </span>
                     </a>
                 </div>
             </div>
@@ -252,27 +252,24 @@
     }
 
     .sidebar-logo {
-    width: 60px; /* Augmentation de la largeur du conteneur */
-    height: 60px; /* Augmentation de la hauteur du conteneur */
-    background: var(--accent-500);
-    border-radius: var(--radius-lg);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-    overflow: hidden; /* Important pour que l'image ne dépasse pas */
-}
+        width: 60px;
+        height: 60px;
+        background: var(--accent-500);
+        border-radius: var(--radius-lg);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        overflow: hidden;
+    }
 
-#sidebar-logo-img {
-    display: block; /* Empêche les marges implicites autour de l'image */
-    max-width: 100%; /* L'image ne dépassera pas la largeur du conteneur */
-    max-height: 100%; /* L'image ne dépassera pas la hauteur du conteneur */
-    height:100; /* Maintient le rapport hauteur/largeur */
-    width: 100; /* Maintient le rapport hauteur/largeur */
-    object-fit: contain; /* Assure que toute l'image est visible, avec des espaces si nécessaire */
-    /* Si ton logo est sombre sur fond sombre de la sidebar, tu peux enlever ou commenter cette ligne: */
-    filter: brightness(0) invert(1); /* Pour les logos SVG blancs sur fond coloré */
-}
+    .sidebar-logo img {
+        display: block;
+        max-width: 100%;
+        max-height: 100%;
+        object-fit: contain;
+        /* filter: brightness(0) invert(1); Si le logo a besoin d'être inversé */
+    }
     .sidebar-title {
         font-size: var(--text-xl);
         font-weight: 700;

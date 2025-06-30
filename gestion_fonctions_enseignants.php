@@ -250,287 +250,7 @@ try {
             margin-left: var(--sidebar-collapsed-width);
         }
 
-        /* === SIDEBAR === */
-        .sidebar {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: var(--sidebar-width);
-            height: 100vh;
-            background: linear-gradient(180deg, var(--primary-800) 0%, var(--primary-900) 100%);
-            color: white;
-            z-index: 1000;
-            transition: all var(--transition-normal);
-            overflow-y: auto;
-            overflow-x: hidden;
-        }
-
-        .sidebar.collapsed {
-            width: var(--sidebar-collapsed-width);
-        }
-
-        .sidebar::-webkit-scrollbar {
-            width: 4px;
-        }
-
-        .sidebar::-webkit-scrollbar-track {
-            background: var(--primary-900);
-        }
-
-        .sidebar::-webkit-scrollbar-thumb {
-            background: var(--primary-600);
-            border-radius: 2px;
-        }
-
-        .sidebar-header {
-            padding: var(--space-6) var(--space-6);
-            border-bottom: 1px solid var(--primary-700);
-            display: flex;
-            align-items: center;
-            gap: var(--space-3);
-        }
-
-        .sidebar-logo {
-            width: 40px;
-            height: 40px;
-            background: var(--accent-500);
-            border-radius: var(--radius-lg);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-shrink: 0;
-        }
-
-        .sidebar-logo img {
-            width: 28px;
-            height: 28px;
-            object-fit: contain;
-            filter: brightness(0) invert(1);
-        }
-
-        .sidebar-title {
-            font-size: var(--text-xl);
-            font-weight: 700;
-            white-space: nowrap;
-            opacity: 1;
-            transition: opacity var(--transition-normal);
-        }
-
-        .sidebar.collapsed .sidebar-title {
-            opacity: 0;
-        }
-
-        .sidebar-nav {
-            padding: var(--space-4) 0;
-        }
-
-        .nav-section {
-            margin-bottom: var(--space-6);
-        }
-
-        .nav-section-title {
-            padding: var(--space-2) var(--space-6);
-            font-size: var(--text-xs);
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            color: var(--primary-400);
-            white-space: nowrap;
-            opacity: 1;
-            transition: opacity var(--transition-normal);
-        }
-
-        .sidebar.collapsed .nav-section-title {
-            opacity: 0;
-        }
-
-        .nav-item {
-            margin-bottom: var(--space-1);
-        }
-
-        .nav-link {
-            display: flex;
-            align-items: center;
-            padding: var(--space-3) var(--space-6);
-            color: var(--primary-200);
-            text-decoration: none;
-            transition: all var(--transition-fast);
-            position: relative;
-            gap: var(--space-3);
-        }
-
-        .nav-link:hover {
-            background: rgba(255, 255, 255, 0.1);
-            color: white;
-        }
-
-        .nav-link.active {
-            background: var(--accent-600);
-            color: white;
-        }
-
-        .nav-link.active::before {
-            content: '';
-            position: absolute;
-            left: 0;
-            top: 0;
-            bottom: 0;
-            width: 4px;
-            background: var(--accent-300);
-        }
-
-        .nav-icon {
-            width: 20px;
-            height: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-shrink: 0;
-        }
-
-        .nav-text {
-            white-space: nowrap;
-            opacity: 1;
-            transition: opacity var(--transition-normal);
-        }
-
-        .sidebar.collapsed .nav-text {
-            opacity: 0;
-        }
-
-        .nav-submenu {
-            margin-left: var(--space-8);
-            margin-top: var(--space-2);
-            border-left: 2px solid var(--primary-700);
-            padding-left: var(--space-4);
-        }
-
-        .sidebar.collapsed .nav-submenu {
-            display: none;
-        }
-
-        .nav-submenu .nav-link {
-            padding: var(--space-2) var(--space-4);
-            font-size: var(--text-sm);
-        }
-
-        /* === TOPBAR === */
-        .topbar {
-            height: var(--topbar-height);
-            background: var(--white);
-            border-bottom: 1px solid var(--gray-200);
-            padding: 0 var(--space-6);
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            box-shadow: var(--shadow-sm);
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
-
-        .topbar-left {
-            display: flex;
-            align-items: center;
-            gap: var(--space-4);
-        }
-
-        .sidebar-toggle {
-            width: 40px;
-            height: 40px;
-            border: none;
-            background: var(--gray-100);
-            border-radius: var(--radius-lg);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: all var(--transition-fast);
-            color: var(--gray-600);
-        }
-
-        .sidebar-toggle:hover {
-            background: var(--gray-200);
-            color: var(--gray-800);
-        }
-
-        .page-title {
-            font-size: var(--text-xl);
-            font-weight: 600;
-            color: var(--gray-800);
-        }
-
-        .topbar-right {
-            display: flex;
-            align-items: center;
-            gap: var(--space-4);
-        }
-
-        .topbar-button {
-            width: 40px;
-            height: 40px;
-            border: none;
-            background: var(--gray-100);
-            border-radius: var(--radius-lg);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: all var(--transition-fast);
-            color: var(--gray-600);
-            position: relative;
-        }
-
-        .topbar-button:hover {
-            background: var(--gray-200);
-            color: var(--gray-800);
-        }
-
-        .notification-badge {
-            position: absolute;
-            top: -2px;
-            right: -2px;
-            width: 18px;
-            height: 18px;
-            background: var(--error-500);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 10px;
-            font-weight: 600;
-            color: white;
-        }
-
-        .user-menu {
-            display: flex;
-            align-items: center;
-            gap: var(--space-3);
-            padding: var(--space-2) var(--space-3);
-            border-radius: var(--radius-lg);
-            cursor: pointer;
-            transition: background var(--transition-fast);
-        }
-
-        .user-menu:hover {
-            background: var(--gray-100);
-        }
-
-        .user-info {
-            text-align: right;
-        }
-
-        .user-name {
-            font-size: var(--text-sm);
-            font-weight: 600;
-            color: var(--gray-800);
-            line-height: 1.2;
-        }
-
-        .user-role {
-            font-size: var(--text-xs);
-            color: var(--gray-500);
-        }
+       
 
         /* === PAGE SPECIFIC STYLES === */
         .page-content {
@@ -651,13 +371,13 @@ try {
         .search-bar {
             background: var(--white);
             border-radius: var(--radius-xl);
-            padding: var(--space-4) var(--space-6);
+            padding: var(--space-4); /* Reduced padding for compact look */
             box-shadow: var(--shadow-sm);
             border: 1px solid var(--gray-200);
             margin-bottom: var(--space-6);
             display: flex;
             align-items: center;
-            gap: var(--space-4);
+            gap: var(--space-3); /* Reduced gap */
         }
 
         .search-input-container {
@@ -667,7 +387,7 @@ try {
 
         .search-input {
             width: 100%;
-            padding: var(--space-3) var(--space-10);
+            padding: var(--space-3) var(--space-8); /* Adjusted padding for icon */
             border: 1px solid var(--gray-300);
             border-radius: var(--radius-lg);
             font-size: var(--text-base);
@@ -690,6 +410,7 @@ try {
         }
 
         .search-button {
+            /* This button is explicitly mentioned in HTML, keeping styles */
             padding: var(--space-3) var(--space-5);
             border-radius: var(--radius-lg);
             font-weight: 600;
@@ -1026,6 +747,75 @@ try {
             background-color: var(--accent-700);
         }
 
+        /* Confirmation Modal Styles */
+        .confirm-modal {
+            display: none; /* Hidden by default */
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1050; /* Higher than message-modal */
+            justify-content: center;
+            align-items: center;
+        }
+
+        .confirm-modal-content {
+            background-color: var(--white);
+            padding: var(--space-6);
+            border-radius: var(--radius-xl);
+            box-shadow: var(--shadow-xl);
+            max-width: 450px;
+            width: 90%;
+            text-align: center;
+            position: relative;
+        }
+
+        .confirm-modal-icon {
+            font-size: 3rem;
+            color: var(--warning-500); /* Yellow for warning/confirmation */
+            margin-bottom: var(--space-4);
+        }
+
+        .confirm-modal-title {
+            font-size: var(--text-xl);
+            font-weight: 600;
+            color: var(--gray-900);
+            margin-bottom: var(--space-2);
+        }
+
+        .confirm-modal-text {
+            color: var(--gray-700);
+            margin-bottom: var(--space-6);
+            line-height: 1.5;
+        }
+
+        .confirm-modal-actions {
+            display: flex;
+            justify-content: center;
+            gap: var(--space-4);
+        }
+
+        .confirm-btn-cancel {
+            background-color: var(--gray-300);
+            color: var(--gray-800);
+        }
+
+        .confirm-btn-cancel:hover {
+            background-color: var(--gray-400);
+        }
+
+        .confirm-btn-delete {
+            background-color: var(--error-500);
+            color: white;
+        }
+
+        .confirm-btn-delete:hover {
+            background-color: var(--error-600);
+        }
+
+
         /* Loading spinner */
         .loading {
             opacity: 0.6;
@@ -1127,6 +917,7 @@ try {
             .search-bar {
                 flex-direction: column;
                 align-items: stretch;
+                padding: var(--space-4); /* Ensure padding consistency for mobile */
             }
             
             .download-buttons {
@@ -1312,7 +1103,7 @@ try {
                                                 <button class="action-button edit" title="Modifier" onclick="modifierFonction('<?php echo htmlspecialchars($fonction['id_fonction']); ?>')">
                                                     <i class="fas fa-pencil-alt"></i>
                                                 </button>
-                                                <button class="action-button delete" title="Supprimer" onclick="supprimerFonction('<?php echo htmlspecialchars($fonction['id_fonction']); ?>')">
+                                                <button class="action-button delete" title="Supprimer" onclick="supprimerFonctionConfirm('<?php echo htmlspecialchars($fonction['id_fonction']); ?>')">
                                                     <i class="fas fa-trash"></i>
                                                 </button>
                                             </div>
@@ -1338,6 +1129,21 @@ try {
         </div>
     </div>
 
+    <div class="confirm-modal" id="confirmModal">
+        <div class="confirm-modal-content">
+            <div class="confirm-modal-icon">
+                <i class="fas fa-exclamation-triangle"></i>
+            </div>
+            <h3 class="confirm-modal-title" id="confirmModalTitle"></h3>
+            <p class="confirm-modal-text" id="confirmModalText"></p>
+            <div class="confirm-modal-actions">
+                <button class="btn confirm-btn-delete" id="confirmDeleteBtn">Oui, Supprimer</button>
+                <button class="btn confirm-btn-cancel" id="confirmCancelBtn">Annuler</button>
+            </div>
+        </div>
+    </div>
+
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
@@ -1345,6 +1151,7 @@ try {
         // Variables globales
         let selectedFunctions = new Set();
         let editingFunction = null;
+        let confirmActionCallback = null; // Callback function for confirmation modal
         const { jsPDF } = window.jspdf;
 
         // Éléments DOM
@@ -1369,6 +1176,8 @@ try {
         const filterButton = document.getElementById('filterButton');
         const filterDropdown = document.getElementById('filterDropdown');
         const filterOptions = document.querySelectorAll('.filter-option');
+
+        // Message Modal elements
         const messageModal = document.getElementById('messageModal');
         const messageTitle = document.getElementById('messageTitle');
         const messageText = document.getElementById('messageText');
@@ -1376,9 +1185,16 @@ try {
         const messageButton = document.getElementById('messageButton');
         const messageClose = document.getElementById('messageClose');
 
-        // Fonction pour afficher les messages dans une modal
+        // Confirmation Modal elements
+        const confirmModal = document.getElementById('confirmModal');
+        const confirmModalTitle = document.getElementById('confirmModalTitle');
+        const confirmModalText = document.getElementById('confirmModalText');
+        const confirmDeleteBtn = document.getElementById('confirmDeleteBtn');
+        const confirmCancelBtn = document.getElementById('confirmCancelBtn');
+
+        // Function to show alert messages in a modal
         function showAlert(message, type = 'success', title = null) {
-            // Définir le titre par défaut en fonction du type
+            // Set default title based on type
             if (!title) {
                 switch (type) {
                     case 'success':
@@ -1398,7 +1214,7 @@ try {
                 }
             }
 
-            // Définir l'icône en fonction du type
+            // Set icon based on type
             messageIcon.className = 'message-icon';
             switch (type) {
                 case 'success':
@@ -1426,12 +1242,12 @@ try {
             messageModal.style.display = 'flex';
         }
 
-        // Fermer la modal
+        // Close the message modal
         function closeMessageModal() {
             messageModal.style.display = 'none';
         }
 
-        // Événements pour la modal
+        // Event listeners for the message modal
         messageButton.addEventListener('click', closeMessageModal);
         messageClose.addEventListener('click', closeMessageModal);
         messageModal.addEventListener('click', function(e) {
@@ -1440,12 +1256,49 @@ try {
             }
         });
 
-        // Gestion du toggle sidebar pour mobile
+        // Function to show confirmation modal
+        function showConfirmModal(title, text, callback) {
+            confirmModalTitle.textContent = title;
+            confirmModalText.textContent = text;
+            confirmActionCallback = callback; // Store the callback function
+            confirmModal.style.display = 'flex';
+        }
+
+        // Close the confirmation modal
+        function closeConfirmModal() {
+            confirmModal.style.display = 'none';
+            confirmActionCallback = null; // Clear the callback
+        }
+
+        // Event listeners for the confirmation modal buttons
+        confirmDeleteBtn.addEventListener('click', function() {
+            if (confirmActionCallback) {
+                confirmActionCallback(true); // Execute callback with true (confirmed)
+            }
+            closeConfirmModal();
+        });
+
+        confirmCancelBtn.addEventListener('click', function() {
+            if (confirmActionCallback) {
+                confirmActionCallback(false); // Execute callback with false (cancelled)
+            }
+            closeConfirmModal();
+        });
+
+        // Close confirmation modal if clicked outside
+        confirmModal.addEventListener('click', function(e) {
+            if (e.target === confirmModal) {
+                closeConfirmModal();
+            }
+        });
+
+
+        // Handle sidebar toggle for mobile
         function toggleSidebar() {
             sidebar.classList.toggle('mobile-open');
             mobileMenuOverlay.classList.toggle('active');
             
-            // Basculer entre les icônes menu/fermer
+            // Toggle between menu/close icons
             const barsIcon = sidebarToggle.querySelector('.fa-bars');
             const timesIcon = sidebarToggle.querySelector('.fa-times');
             
@@ -1466,7 +1319,7 @@ try {
             mobileMenuOverlay.addEventListener('click', toggleSidebar);
         }
 
-        // Fonction pour faire une requête AJAX
+        // Function for making AJAX requests
         async function makeAjaxRequest(data) {
             try {
                 const response = await fetch(window.location.href, {
@@ -1483,7 +1336,7 @@ try {
             }
         }
 
-        // Fonction pour mettre à jour l'état des boutons
+        // Function to update button states
         function updateActionButtons() {
             if (selectedFunctions.size === 1) {
                 modifierFunctionBtn.disabled = false;
@@ -1497,10 +1350,10 @@ try {
             }
         }
 
-        // Fonction pour ajouter une ligne dans le tableau
+        // Function to add a row to the table
         function addRowToTable(fonction) {
-            // Supprimer le message "Aucune fonction trouvée" s'il existe
-            const emptyRow = functionTableBody.querySelector('td[colspan="4"]'); // Changed colspan to 4 for ID column
+            // Remove "No function found" message if it exists
+            const emptyRow = functionTableBody.querySelector('td[colspan="4"]');
             if (emptyRow) {
                 emptyRow.closest('tr').remove();
             }
@@ -1520,7 +1373,7 @@ try {
                         <button class="action-button edit" title="Modifier" onclick="modifierFonction('${fonction.id_fonction}')">
                             <i class="fas fa-pencil-alt"></i>
                         </button>
-                        <button class="action-button delete" title="Supprimer" onclick="supprimerFonction('${fonction.id_fonction}')">
+                        <button class="action-button delete" title="Supprimer" onclick="supprimerFonctionConfirm('${fonction.id_fonction}')">
                             <i class="fas fa-trash"></i>
                         </button>
                     </div>
@@ -1529,7 +1382,7 @@ try {
             attachEventListenersToRow(newRow);
         }
 
-        // Fonction pour attacher les événements aux lignes
+        // Function to attach event listeners to rows
         function attachEventListenersToRow(row) {
             const checkbox = row.querySelector('input[type="checkbox"]');
             
@@ -1543,7 +1396,7 @@ try {
             });
         }
 
-        // Fonction de recherche
+        // Search function
         function searchFunctions() {
             const searchTerm = searchInput.value.toLowerCase();
             const rows = functionTableBody.querySelectorAll('tr[data-id]'); // Select only data rows
@@ -1584,7 +1437,7 @@ try {
             }
         }
 
-        // Fonction pour appliquer les filtres
+        // Function to apply filters
         function applyFilter(filterType) {
             let rows = Array.from(functionTableBody.querySelectorAll('tr[data-id]')); // Select only data rows
             
@@ -1634,7 +1487,7 @@ try {
             } else {
                 rows.forEach(row => functionTableBody.appendChild(row));
             }
-            showAlert('Filtre appliqué.', 'info');
+            // No showAlert here as it's just a filter application, not a data modification confirmation.
         }
 
         // Function to reload initial functions if the table is empty due to search/filter
@@ -1644,7 +1497,7 @@ try {
             location.reload(); 
         }
 
-        // Soumission du formulaire
+        // Form submission
         functionForm.addEventListener('submit', async function(e) {
             e.preventDefault();
 
@@ -1666,7 +1519,7 @@ try {
 
                 if (result.success) {
                     if (editingFunction) {
-                        // Mettre à jour la ligne existante
+                        // Update existing row
                         const row = document.querySelector(`tr[data-id="${editingFunction}"]`);
                         if (row) {
                             row.cells[2].textContent = data.nom_fonction; // Update name column
@@ -1674,7 +1527,7 @@ try {
                         showAlert('Fonction modifiée avec succès', 'success');
                         resetForm();
                     } else {
-                        // Ajouter une nouvelle ligne
+                        // Add new row
                         addRowToTable(result.data);
                         showAlert(`Fonction "${data.nom_fonction}" créée avec succès`, 'success');
                     }
@@ -1693,7 +1546,7 @@ try {
             }
         });
 
-        // Fonction pour réinitialiser le formulaire
+        // Function to reset the form
         function resetForm() {
             editingFunction = null;
             submitText.textContent = 'Ajouter Fonction';
@@ -1705,12 +1558,12 @@ try {
             functionTableBody.querySelectorAll('input[type="checkbox"]').forEach(cb => cb.checked = false);
         }
 
-        // Bouton Annuler
+        // Cancel button
         cancelBtn.addEventListener('click', function() {
             resetForm();
         });
 
-        // Fonction pour modifier une fonction
+        // Function to modify a function
         function modifierFonction(idFonction) {
             const row = document.querySelector(`tr[data-id="${idFonction}"]`);
             if (row) {
@@ -1728,52 +1581,57 @@ try {
                 selectedFunctions.add(currentCheckbox.value);
                 updateActionButtons();
 
-                // Faire défiler vers le formulaire
+                // Scroll to the form
                 document.querySelector('.form-card').scrollIntoView({ behavior: 'smooth' });
             }
         }
 
-        // Fonction pour supprimer une fonction
-        async function supprimerFonction(idFonction) {
+        // Function to confirm deletion of a single function
+        function supprimerFonctionConfirm(idFonction) {
             const row = document.querySelector(`tr[data-id="${idFonction}"]`);
             if (row) {
                 const nomFonction = row.cells[2].textContent;
-                
-                if (confirm(`Êtes-vous sûr de vouloir supprimer la fonction "${nomFonction}" ?\n\nAttention : Cette action supprimera aussi les associations avec les enseignants.`)) {
-                    try {
-                        const result = await makeAjaxRequest({
-                            action: 'delete',
-                            ids_fonctions: JSON.stringify([idFonction])
-                        });
+                showConfirmModal(
+                    'Confirmation de Suppression',
+                    `Êtes-vous sûr de vouloir supprimer la fonction "${nomFonction}" ?\n\nAttention : Cette action supprimera aussi les associations avec les enseignants.`,
+                    async (confirmed) => {
+                        if (confirmed) {
+                            try {
+                                const result = await makeAjaxRequest({
+                                    action: 'delete',
+                                    ids_fonctions: JSON.stringify([idFonction])
+                                });
 
-                        if (result.success) {
-                            row.remove();
-                            selectedFunctions.delete(idFonction);
-                            updateActionButtons();
-                            showAlert('Fonction supprimée avec succès', 'success');
-                            
-                            // Si plus de fonctions, afficher le message vide
-                            if (functionTableBody.children.length === 0) {
-                                functionTableBody.innerHTML = `
-                                    <tr>
-                                        <td colspan="4" style="text-align: center; color: var(--gray-500); padding: var(--space-8);">
-                                            <i class="fas fa-briefcase" style="font-size: 2rem; margin-bottom: var(--space-2);"></i><br>
-                                            Aucune fonction trouvée. Ajoutez votre première fonction en utilisant le formulaire ci-dessus.
-                                        </td>
-                                    </tr>
-                                `;
+                                if (result.success) {
+                                    row.remove();
+                                    selectedFunctions.delete(idFonction);
+                                    updateActionButtons();
+                                    showAlert('Fonction supprimée avec succès', 'success');
+                                    
+                                    // If no functions, display empty message
+                                    if (functionTableBody.children.length === 0) {
+                                        functionTableBody.innerHTML = `
+                                            <tr>
+                                                <td colspan="4" style="text-align: center; color: var(--gray-500); padding: var(--space-8);">
+                                                    <i class="fas fa-briefcase" style="font-size: 2rem; margin-bottom: var(--space-2);"></i><br>
+                                                    Aucune fonction trouvée. Ajoutez votre première fonction en utilisant le formulaire ci-dessus.
+                                                </td>
+                                            </tr>
+                                        `;
+                                    }
+                                } else {
+                                    showAlert(result.message, 'error');
+                                }
+                            } catch (error) {
+                                showAlert('Erreur lors de la suppression', 'error');
                             }
-                        } else {
-                            showAlert(result.message, 'error');
                         }
-                    } catch (error) {
-                        showAlert('Erreur lors de la suppression', 'error');
                     }
-                }
+                );
             }
         }
 
-        // Bouton Modifier global
+        // Global modify button
         modifierFunctionBtn.addEventListener('click', function() {
             if (selectedFunctions.size === 1) {
                 const idFonction = Array.from(selectedFunctions)[0];
@@ -1783,7 +1641,7 @@ try {
             }
         });
 
-        // Bouton Supprimer global
+        // Global delete button
         supprimerFunctionBtn.addEventListener('click', async function() {
             if (selectedFunctions.size === 0) {
                 showAlert('Veuillez sélectionner au moins une fonction à supprimer.', 'warning');
@@ -1791,41 +1649,49 @@ try {
             }
             const idsArray = Array.from(selectedFunctions);
             
-            if (confirm(`Êtes-vous sûr de vouloir supprimer ${idsArray.length} fonction(s) sélectionnée(s) ?\n\nAttention : Cette action supprimera aussi les associations avec les enseignants.`)) {
-                try {
-                    const result = await makeAjaxRequest({
-                        action: 'delete',
-                        ids_fonctions: JSON.stringify(idsArray)
-                    });
+            showConfirmModal(
+                'Confirmation de Suppression',
+                `Êtes-vous sûr de vouloir supprimer ${idsArray.length} fonction(s) sélectionnée(s) ?\n\nAttention : Cette action supprimera aussi les associations avec les enseignants.`,
+                async (confirmed) => {
+                    if (confirmed) {
+                        try {
+                            const result = await makeAjaxRequest({
+                                action: 'delete',
+                                ids_fonctions: JSON.stringify(idsArray)
+                            });
 
-                    if (result.success) {
-                        idsArray.forEach(id => {
-                            const row = document.querySelector(`tr[data-id="${id}"]`);
-                            if (row) row.remove();
-                        });
-                        selectedFunctions.clear();
-                        updateActionButtons();
-                        showAlert('Fonction(s) supprimée(s) avec succès', 'success');
-                        
-                        // Si plus de fonctions, afficher le message vide
-                        if (functionTableBody.children.length === 0) {
-                            functionTableBody.innerHTML = `
-                                <tr>
-                                    <td colspan="4" style="text-align: center; color: var(--gray-500); padding: var(--space-8);">
-                                        <i class="fas fa-briefcase" style="font-size: 2rem; margin-bottom: var(--space-2);"></i><br>
-                                        Aucune fonction trouvée. Ajoutez votre première fonction en utilisant le formulaire ci-dessus.
-                                    </td>
-                                </tr>
-                            `;
+                            if (result.success) {
+                                idsArray.forEach(id => {
+                                    const row = document.querySelector(`tr[data-id="${id}"]`);
+                                    if (row) row.remove();
+                                });
+                                selectedFunctions.clear();
+                                updateActionButtons();
+                                showAlert('Fonction(s) supprimée(s) avec succès', 'success');
+                                
+                                // If no functions left, display empty message
+                                if (functionTableBody.children.length === 0) {
+                                    functionTableBody.innerHTML = `
+                                        <tr>
+                                            <td colspan="4" style="text-align: center; color: var(--gray-500); padding: var(--space-8);">
+                                                <i class="fas fa-briefcase" style="font-size: 2rem; margin-bottom: var(--space-2);"></i><br>
+                                                Aucune fonction trouvée. Ajoutez votre première fonction en utilisant le formulaire ci-dessus.
+                                            </td>
+                                        </tr>
+                                    `;
+                                }
+                            } else {
+                                showAlert(result.message, 'error');
+                            }
+                        } catch (error) {
+                            showAlert('Erreur lors de la suppression', 'error');
                         }
-                    } else {
-                        showAlert(result.message, 'error');
                     }
                 }
-            }
+            );
         });
 
-        // Fonction pour obtenir les données d'export
+        // Function to get export data
         function getExportData() {
             const headers = ['ID', 'Nom de la Fonction'];
             const rows = [];
@@ -1951,7 +1817,7 @@ try {
             }
         });
 
-        // Initialisation
+        // Initialization
         document.addEventListener('DOMContentLoaded', function() {
             // Attach event listeners to existing rows
             document.querySelectorAll('#functionTable tbody tr').forEach(row => {
@@ -2003,7 +1869,7 @@ try {
 
         // Expose functions to global scope for inline onclicks
         window.modifierFonction = modifierFonction;
-        window.supprimerFonction = supprimerFonction;
+        window.supprimerFonctionConfirm = supprimerFonctionConfirm; // Expose the new confirmation function
     </script>
 </body>
 </html>

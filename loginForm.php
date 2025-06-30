@@ -230,8 +230,8 @@ if (isset($_SESSION['account_blocked'])) {
         }
 
         .logo-icon {
-            width: 60px;
-            height: 60px;
+            width: 90px; /* Augmenté pour un logo plus grand */
+            height: 90px; /* Augmenté pour un logo plus grand */
             background: rgba(255, 255, 255, 0.2);
             border: 2px solid rgba(255, 255, 255, 0.3);
             border-radius: var(--radius-xl);
@@ -241,6 +241,13 @@ if (isset($_SESSION['account_blocked'])) {
             margin: 0 auto var(--space-3);
             backdrop-filter: blur(10px);
             transition: all var(--transition-normal);
+        }
+
+        .logo-icon img { /* Style pour l'image du logo */
+            max-width: 100%;
+            max-height: 100%;
+            display: block; /* Supprime l'espace sous l'image */
+            object-fit: contain; /* Empêche l'image de se déformer */
         }
 
         .logo-icon:hover {
@@ -406,6 +413,7 @@ if (isset($_SESSION['account_blocked'])) {
             transition: all var(--transition-normal);
             outline: none;
             height: 48px; /* Hauteur uniforme pour tous les champs */
+            width: 100%; /* Ajouté pour assurer la même largeur */
         }
 
         .form-input:focus {
@@ -426,6 +434,11 @@ if (isset($_SESSION['account_blocked'])) {
 
         .password-container {
             position: relative;
+            width: 100%; /* Ajouté pour assurer que le conteneur prend toute la largeur */
+        }
+
+        .password-container .form-input {
+            padding-right: calc(var(--space-4) + 30px); /* Ajusté pour laisser de la place à l'icône */
         }
 
         .password-toggle {
@@ -439,6 +452,10 @@ if (isset($_SESSION['account_blocked'])) {
             cursor: pointer;
             font-size: 1rem;
             transition: color var(--transition-normal);
+            width: 30px; /* Largeur fixe pour le bouton de bascule */
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .password-toggle:hover {
@@ -647,7 +664,7 @@ if (isset($_SESSION['account_blocked'])) {
 
                 <div class="logo-section">
                     <div class="logo-icon">
-                        <i class="fas fa-graduation-cap" style="font-size: 1.5rem; color: white;"></i>
+                        <img src="WhatsApp Image 2025-05-15 à 00.54.47_42b83ab0.jpg" alt="SYGECOS Logo">
                     </div>
                     <h1 class="brand-text">SYGECOS</h1>
                     <p class="brand-subtitle">

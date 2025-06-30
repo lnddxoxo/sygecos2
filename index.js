@@ -28,36 +28,6 @@ thumbnails.forEach((thumb, index) => {
     });
 });
 
-// University Slider functionality
-let currentUniversitySlide = 0;
-const universitySlides = document.querySelectorAll('.university-slide');
-const universityThumbnails = document.querySelectorAll('.university-thumb');
-
-function showUniversitySlide(index) {
-    universitySlides.forEach((slide, i) => {
-        slide.classList.toggle('active', i === index);
-    });
-    universityThumbnails.forEach((thumb, i) => {
-        thumb.classList.toggle('active', i === index);
-    });
-}
-
-function nextUniversitySlide() {
-    currentUniversitySlide = (currentUniversitySlide + 1) % universitySlides.length;
-    showUniversitySlide(currentUniversitySlide);
-}
-
-// Auto-advance university slider
-setInterval(nextUniversitySlide, 4000);
-
-// University thumbnail click handlers
-universityThumbnails.forEach((thumb, index) => {
-    thumb.addEventListener('click', () => {
-        currentUniversitySlide = index;
-        showUniversitySlide(currentUniversitySlide);
-    });
-});
-
 // Navigation scroll effect
 window.addEventListener('scroll', function() {
     const navbar = document.querySelector('.navbar');
@@ -87,24 +57,37 @@ const scrollRevealElements = document.querySelectorAll('.scroll-reveal');
 const revealElementOnScroll = () => {
     scrollRevealElements.forEach(element => {
         const elementTop = element.getBoundingClientRect().top;
-        const elementVisible = 150;
+        const elementVisible = 150; // Pixels from bottom of viewport to trigger reveal
         
         if (elementTop < window.innerHeight - elementVisible) {
             element.classList.add('revealed');
+        } else {
+            // Optional: remove 'revealed' class if element scrolls back up
+            // element.classList.remove('revealed');
         }
     });
 };
 
 window.addEventListener('scroll', revealElementOnScroll);
-revealElementOnScroll(); // Initial check
+revealElementOnScroll(); // Initial check on page load to reveal elements already in view
 
 // Add interactive hover effects
-document.querySelectorAll('.process-card').forEach(card => {
+document.querySelectorAll('.process-card, .university-feature-img').forEach(card => {
     card.addEventListener('mouseenter', function() {
-        this.style.transform = 'translateY(-8px) scale(1.02)';
+        if (this.classList.contains('process-card')) {
+            this.style.transform = 'translateY(-8px)';
+            this.style.boxShadow = 'var(--shadow-xl)';
+        } else if (this.classList.contains('university-feature-img')) {
+            this.style.transform = 'scale(1.05)';
+        }
     });
     
     card.addEventListener('mouseleave', function() {
-        this.style.transform = 'translateY(0) scale(1)';
+        if (this.classList.contains('process-card')) {
+            this.style.transform = 'translateY(0)';
+            this.style.boxShadow = 'var(--shadow-sm)';
+        } else if (this.classList.contains('university-feature-img')) {
+            this.style.transform = 'scale(1)';
+        }
     });
 });

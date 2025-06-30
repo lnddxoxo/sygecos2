@@ -1,36 +1,15 @@
-<?php
-session_start();
-
-// Vérifie si l'utilisateur est connecté
-if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== TRUE) {
-    header("Location: index.php"); // Redirige vers la page de connexion si non connecté
-    exit;
-}
-
-// Récupère les informations de l'utilisateur depuis la session
-$id_util = $_SESSION['id_util'];
-$login_util = $_SESSION['login_util'];
-$nom_prenom = $_SESSION['nom_prenom'];
-$role = $_SESSION['role']; // Ex: "Responsable de filière"
-
-?>
-
 <!DOCTYPE html>
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SYGECOS - Plateforme de Gestion des Soutenances M2</title>
+    <title>SYGECOS - Plateforme de Gestion des Soutenances </title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <link href="index.css" rel="stylesheet">
-    <style>
-        
-    </style>
 </head>
 <body>
     <div class="page-background"></div>
 
-    <!-- Navigation -->
     <nav class="navbar">
         <div class="nav-container">
             <a href="#" class="logo">
@@ -47,21 +26,20 @@ $role = $_SESSION['role']; // Ex: "Responsable de filière"
                 <li><a href="#contact" class="nav-link">Contact</a></li>
             </ul>
 
-            <a href="login.php" class="login-btn">
+            <a href="loginForm.php" class="login-btn"> 
                 <i class="fas fa-sign-in-alt"></i>
                 Se connecter
             </a>
         </div>
     </nav>
 
-    <!-- Hero Slider -->
     <section class="hero-slider" id="accueil">
         <div class="slide active" style="background-image: url('images.jpeg')">
             <div class="slide-content">
                 <h1>Bienvenue à SYGECOS</h1>
                 <p>Système de Gestion des Soutenances M2 - UFR Mathématiques et Informatique</p>
                 <div class="hero-cta">
-                    <a href="/login" class="btn-primary-hero">
+                    <a href="loginForm.php" class="btn-primary-hero"> 
                         <i class="fas fa-sign-in-alt"></i>
                         Accéder à la plateforme
                     </a>
@@ -76,9 +54,9 @@ $role = $_SESSION['role']; // Ex: "Responsable de filière"
         <div class="slide" style="background-image: url('unnamed.webp')">
             <div class="slide-content">
                 <h1>Excellence Académique</h1>
-                <p>Une tradition d'excellence dans la formation des futurs professionnels</p>
+                <p>Une tradition d'excellence dans la formation des futurs cadres</p>
                 <div class="hero-cta">
-                    <a href="/login" class="btn-primary-hero">
+                    <a href="loginForm.php" class="btn-primary-hero"> 
                         <i class="fas fa-graduation-cap"></i>
                         Rejoindre SYGECOS
                     </a>
@@ -106,31 +84,43 @@ $role = $_SESSION['role']; // Ex: "Responsable de filière"
         </div>
     </section>
 
-    <!-- Section Université avec Slider -->
     <section class="university-section" id="universite">
-        <div class="university-slider">
-            <div class="university-slide active" style="background-image: url('Le-President-Ballo-Zie.jpg')">
-                <div class="university-content">
-                    <h2>UFR Mathématiques et Informatique</h2>
-                    <p>L'UFR Mathématiques et Informatique de l'UFHB forme des professionnels de haut niveau dans les domaines des mathématiques appliquées et de l'informatique, avec un accent particulier sur l'innovation et la recherche.</p>
+        <div class="university-container">
+            <h2 class="section-title university-title-centered scroll-reveal">UNIVERSITE</h2>
+            
+            <div class="university-feature reversed-layout">
+                <div class="university-image-wrapper scroll-reveal">
+                    <img src="jj.jpeg" alt="Campus de l'UFHB" class="university-feature-img">
+                </div>
+                <div class="university-text-content scroll-reveal">
+                    <h3>Une institution d'excellence</h3>
+                    <p>
+                        L'Université Félix Houphouët-Boigny (UFHB), située à Abidjan, Côte d'Ivoire, est un pilier de l'enseignement supérieur en Afrique de l'Ouest. Fondée en 1964, elle s'est imposée comme un centre de formation et de recherche de premier plan, attirant des étudiants et des chercheurs de toute la sous-région. L'UFHB offre un large éventail de disciplines, des sciences humaines et sociales aux sciences exactes et techniques.
+                    </p>
+                    <p>
+                        Son engagement envers la qualité académique et l'innovation est au cœur de sa mission, formant des générations de professionnels et de leaders qui contribuent au développement de la Côte d'Ivoire et au-delà.
+                    </p>
                 </div>
             </div>
 
-            <div class="university-slide" style="background-image: url('MONSAN-Vincent.jpg')">
-                <div class="university-content">
-                    <h2>Excellence Académique</h2>
-                    <p>Des infrastructures de pointe et un corps professoral d'excellence pour former les leaders de demain dans les domaines technologiques et scientifiques.</p>
+            <div class="university-feature">
+                <div class="university-image-wrapper scroll-reveal">
+                    <img src="qq.jpeg" alt="UFR Mathématiques et Informatique" class="university-feature-img">
+                </div>
+                <div class="university-text-content scroll-reveal">
+                    <h3>L'UFR Mathématiques et Informatique (UFR MI)</h3>
+                    <p>
+                        Au sein de l'UFHB, l'UFR Mathématiques et Informatique (UFR MI) est un département dynamique et à la pointe de la technologie. Elle est dédiée à la formation de spécialistes en mathématiques appliquées, en informatique, en statistiques et en modélisation. Les programmes sont conçus pour répondre aux exigences du monde professionnel et aux avancées scientifiques.
+                    </p>
+                    <p>
+                        L'UFR MI dispose d'infrastructures modernes, de laboratoires équipés et d'un corps professoral expérimenté, garantissant un environnement d'apprentissage stimulant et propice à la réussite. Elle est un acteur clé dans la promotion de l'innovation numérique et de la recherche scientifique en Côte d'Ivoire.
+                    </p>
                 </div>
             </div>
-        </div>
 
-        <div class="university-pagination">
-            <div class="university-thumb active" data-university-slide="0" style="background-image: url('Le-President-Ballo-Zie.jpg')"></div>
-            <div class="university-thumb" data-university-slide="1" style="background-image: url('MONSAN-VINCENT.jpg')"></div>
         </div>
     </section>
 
-    <!-- Section Processus -->
     <section class="process" id="processus">
         <div class="process-container">
             <h2 class="section-title scroll-reveal">Processus de Gestion</h2>
@@ -212,7 +202,6 @@ $role = $_SESSION['role']; // Ex: "Responsable de filière"
         </div>
     </section>
 
-    <!-- Section Image Finale -->
     <section class="final-image-section">
         <div class="final-image-container">
             <div class="final-image scroll-reveal" style="background-image: url('téléchargement.jpeg')">
@@ -224,7 +213,6 @@ $role = $_SESSION['role']; // Ex: "Responsable de filière"
         </div>
     </section>
 
-    <!-- Footer -->
     <footer class="footer">
         <div class="footer-container">
             <div class="footer-content">
@@ -256,8 +244,6 @@ $role = $_SESSION['role']; // Ex: "Responsable de filière"
         </div>
     </footer>
 
-    <script src="index.js">
-        
-    </script>
+    <script src="index.js"></script>
 </body>
 </html>
