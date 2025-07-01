@@ -47,7 +47,7 @@ $role = $_SESSION['role']; // Ex: "Responsable de filière"
                 <li><a href="#contact" class="nav-link">Contact</a></li>
             </ul>
 
-            <a href="login.php" class="login-btn">
+            <a href="loginForm.php" class="login-btn">
                 <i class="fas fa-sign-in-alt"></i>
                 Se connecter
             </a>
